@@ -1,0 +1,90 @@
+.navbar .navbar-expand-lg {
+  background-color: blanchedalmond;
+  color: blue;
+}
+
+.wrapper {
+  // background-color: #3f6999;
+  background-color: #3177b3;
+  // background-color: #00a8e8;
+  // background-color: #011eab;
+  // background-color: #3ea5ce;
+  // background-color: #1868ae;
+  // background-color: #00a8e8;
+  // background-color: #28666e;
+}
+
+.nav-link {
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.wrapper-1 {
+  color: white;
+}
+
+.wrapper-2 {
+  background-color: cornflowerblue;
+}
+
+.wrapper-3 {
+  color: white;
+}
+
+.isActive,
+.nav-link :hover {
+  color: #fbfcff !important;
+  border-bottom: 2px solid #efa603;
+  font-weight: bold;
+  height: 32px;
+  
+}
+
+a:not([href]):not([tabindex]):hover,
+a:not([href]):not([tabindex]):focus {
+  color: #fffbda;
+  text-decoration: none;
+}
+
+.disabledTab {
+  pointer-events: none;
+}
+
+/* SHIFT */
+nav.shift ul li a {
+  position: relative;
+  z-index: 1;
+}
+
+
+nav.shift ul li a:after {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: 95%;
+  height: 1px;
+  content: ".";
+  color: transparent;
+  // background: #F1C40F;
+  background: white;
+  visibility: none;
+  opacity: 0;
+  z-index: -1;
+  box-shadow: 0 1px 10px 0 rgb(251 251 251);
+}
+
+nav.shift ul li a:hover:after {
+  opacity: 1;
+  visibility: visible;
+  height: 100%;
+  border-radius: 20px;
+}
+.btn-outline-secondary {
+  color: #000000;
+  border-color: #848484;
+}

@@ -1,0 +1,112 @@
+@media only screen and (max-width: 600px) {
+    .wrapper-2 {
+        margin-top: 2rem!important;
+
+    }
+}
+@media only screen and (max-width: 600px) {
+    img {
+        height: 200px;
+    }
+}
+
+.item {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.item-card {
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.item-card-title {
+    font-size: 15px;
+    transition: 1s;
+    cursor: pointer;
+}
+
+.item-card-title i {
+    font-size: 15px;
+    transition: 1s;
+    cursor: pointer;
+    color: #ffa710;
+}
+
+.card-title i:hover {
+    transform: scale(1.25) rotate(100deg);
+    color: #18d4ca;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    // box-shadow: 3px 10px 10px 4px #c5c5c5bd;
+}
+
+.card-text {
+    height: 80px;
+}
+
+.card::before,
+.card::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: scale3d(0, 0, 1);
+    transition: transform 0.3s ease-out 0s;
+    background: rgba(255, 255, 255, 0.1);
+    content: "";
+    pointer-events: none;
+}
+
+.card::before {
+    transform-origin: left top;
+}
+
+.card::after {
+    transform-origin: right bottom;
+}
+
+.card:hover::before,
+.card:hover::after,
+.card:focus::before,
+.card:focus::after {
+    transform: scale3d(1, 1, 1);
+}
+
+#cardgreen {
+    background: linear-gradient(150deg, #efdd39, #4600f1 100%);
+}
+
+#cardpurple {
+    background: linear-gradient(150deg, #e595ff, #4600f1 100%);
+}
+
+#cardblue {
+    background: linear-gradient(150deg, #a8d8ff, #28008d 100%);
+}
+
+#cardorange {
+    background: linear-gradient(150deg, #f78031, #4600f1 100%);
+}
+
+// #cardgreen {
+//     background-color: #4600f1;
+// }
+#cardpurple {
+    background: linear-gradient(150deg, #e595ff, #4600f1 100%);
+}
+
+#cardblue {
+    background: linear-gradient(150deg, #a8d8ff, #28008d 100%);
+}
+
+#cardorange {
+    background: linear-gradient(150deg, #f78031, #4600f1 100%);
+}
+
+.card-title {
+    color: black;
+}

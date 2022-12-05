@@ -1,0 +1,37 @@
+<mat-drawer-container class="example-container" autosize>
+  <mat-drawer #AddQuestion class="example-sidenav" mode="side" position="end">
+      <app-add-questions (closedrawer)="Ondrawerclose($event)" [ChecklistId]="chkId" (newItemEvent)="OnQueSucess($event)">
+      </app-add-questions>
+  </mat-drawer>
+  <div class="example-sidenav-content">
+      <div class="container my-2">
+        <app-grid *ngIf="Questions" [dataFromComponent]="Questions" [action]="true" [coloums]="QuestionsColoums"></app-grid>
+          <div class="wrapper-1">
+            <button class="btn btn-danger" (click)="CloseLargeModal()" style="margin-right: 1rem;" type="submit">Close
+            </button>
+              <button class="btn btn-primary" (click)="AddQuestion.toggle()" type="submit">Add
+                  Question</button>
+          </div>
+      </div>
+  </div>
+</mat-drawer-container>
+
+<div bsModal #mydeleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="genericModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6>Are you sure you want to delete this question ?</h6><br>
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-3">
+            <button type="button" class="btn btn-outline-secondary" (click)="mydeleteModal.hide()">Cancel</button>
+          </div>
+          <div class="col-3">
+            <button type="button" class="btn btn-danger" (click)="DelQuestion()">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,164 @@
+<div class="wrapper">
+    <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
+        <mdb-navbar-brand><a class="navbar-brand" style="font-weight: bold; color: white; cursor: pointer;">Time
+                Sheet</a></mdb-navbar-brand>
+        <links class="wrapper1">
+            <ul class="navbar-nav mr-auto">
+                <!-- <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'time-dashboard'}" (click)="isActivated('time-dashboard')"
+                        mdbWavesEffect> Dashboard<span class="sr-only">(current)</span></a>
+                </li> -->
+                <li class="nav-item dropdown" dropdown>
+                    <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light"
+                        mdbWavesEffect *ngIf="AccessAdmin" [ngClass]="{isActive : active === 'time-control'}">
+                        Configure<span class="caret"></span></a>
+                    <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary"
+                        style="background-color: #3177b3;text-align: center;" role="menu">
+                        <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                            [ngClass]="{isActive : active === 'time-control'}" (click)="isActivated('time-control')"
+                            mdbWavesEffect>Project<span class="sr-only"></span></a>
+                        <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                            [ngClass]="{isActive : active === 'time-task'}" (click)="isActivated('time-task')"
+                            mdbWavesEffect> Task <span class="sr-only"></span></a>
+                    </div>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'time-control'}" (click)="isActivated('time-control')"
+                        mdbWavesEffect>Configure<span class="sr-only"></span></a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'time-assignment'}" (click)="isActivated('time-assignment')"
+                        mdbWavesEffect>Assignment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessUser" [ngClass]="{isActive : active === 'time-submit'}"
+                        (click)="isActivated('time-submit')" mdbWavesEffect>Submit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'time-approval'}" (click)="isActivated('time-approval')"
+                        mdbWavesEffect>Approval</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link waves-light" title="Dashboard" routerLink="/dashboard" mdbWavesEffect><span
+                            class="material-icons">dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" title="Logout" (click)="LogoutModal.show()" mdbWavesEffect><span
+                            class="material-icons">logout</span>
+                    </a>
+                </li>
+            </ul>
+        </links>
+    </mdb-navbar>
+</div>
+
+<!-- <div class="wrapper-2" *ngIf="Tab">
+    <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
+        <mdb-navbar-brand><a class="navbar-brand"
+                style="font-weight: bold; color: white; cursor: pointer;">Configure</a></mdb-navbar-brand>
+        <links class="wrapper-3">
+            <ul class="navbar-nav mr-auto" style="font-weight: 400;">
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin" (click)="Activated('time-control')"
+                        mdbWavesEffect> Project<span class="sr-only"></span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin" (click)="Activated('time-task')" mdbWavesEffect>
+                        Task <span class="sr-only"></span></a>
+                </li>
+            </ul>
+        </links>
+    </mdb-navbar>
+</div> -->
+
+<div class="container">
+    <div class="card p-2 my-2">
+        <div class="row my-2">
+            <div class="col-md-2">
+                <strong>EMPLOYEE NAME </strong>
+            </div>
+            <div class="col-md-1 colon">
+                :
+            </div>
+            <div class="col-md-4">
+                {{UserDetails.username}}
+            </div>
+            <div class="col-md-2">
+                <strong> EMPLOYEE ID </strong>
+            </div>
+            <div class="col-md-1 colon">
+                :
+            </div>
+            <div class="col-md-2">
+                {{UserDetails.userid}}
+            </div>
+        </div>
+        <div class="row my-1">
+            <div class="col-md-2">
+                <strong> DESIGNATION </strong>
+            </div>
+            <div class="col-md-1 colon">
+                :
+            </div>
+            <div class="col-md-4">
+                {{UserDetails.usertype}}
+            </div>
+            <div class="col-md-2">
+                <strong> DEPARTMENT </strong>
+            </div>
+            <div class="col-md-1 colon">
+                :
+            </div>
+            <div class="col-md-2">
+                {{Depart}}
+            </div>
+        </div>
+        <div class="row my-1">
+            <div class="col-md-2">
+                <strong> USER DEPARTMENT </strong>
+            </div>
+            <div class="col-md-1 colon ">
+                :
+            </div>
+            <div class="col-md-2">
+                {{UserDetails.userDepartment}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <app-checklist-dashboard *ngIf="active === 'time-dashboard'"></app-checklist-dashboard> -->
+<app-time-task [Depart]="Depart" *ngIf="active === 'time-task'"></app-time-task>
+<app-time-configure [Depart]="Depart" *ngIf="active === 'time-control'"></app-time-configure>
+<app-time-assign *ngIf="active === 'time-assignment'"></app-time-assign>
+<app-time-submit *ngIf="active === 'time-submit'"></app-time-submit>
+<app-time-approval *ngIf="active === 'time-approval'"></app-time-approval>
+<app-timesheet *ngIf="active === 'timesheet'"></app-timesheet>
+
+<div bsModal #LogoutModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal right" tabindex="-1" role="dialog"
+    aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>Are you sure you want to log-out?</h6><br>
+                <div class="row" style="float: right;">
+                   
+                    <div class="col-5">
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="LogoutModal.hide()">No</button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-danger" routerLink="/login">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

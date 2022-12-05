@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row" style="margin-top: 1rem;">
+    <div class="col-md-4">
+      <label class="navbar-brand"> States :</label>
+      <select (change)="LoadAllCentres($event.target.value)" class="firstDrop">
+        <option [ngValue]="null">Please select</option>
+        <option *ngFor="let c of stateNames">{{c.name}}</option>
+      </select>
+    </div>
+    <div class="col-md-4 ">
+      <label class="navbar-brand"> Centers:</label>
+      <select (change)="LoadEmpList($event.target.value)" class="SecondDrop">
+        <option [ngValue]="null">Please select</option>
+        <option *ngFor="let details of loadCentres" [value]='details.centerCode'>{{details.centerName}}</option>
+      </select>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="centerSelected">
+  <app-departlist [DepartmentList]="DepartmentList" [centerid]="centerid" [statename]="selectedState"></app-departlist>
+</div>

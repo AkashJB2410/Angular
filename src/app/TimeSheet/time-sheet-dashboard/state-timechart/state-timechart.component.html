@@ -1,0 +1,39 @@
+<div class="container">
+    <!-- <div class="row" style="margin-top: 1rem;">
+      <div class="col-md-4">
+        <label class="navbar-brand"> chart :</label>
+        <select (change)="dropdownchart($event)">
+          
+          <option [ngValue]="barchart">Bar Chart</option>
+            <option [ngValue]="piechart">Pie Chart</option>
+            <option [ngValue]="linechart">Line Chart</option>
+            <option *ngFor="let c of dropdownchart">{{dropdownchart.c }} </option> 
+         </select>
+      </div>
+    </div> --><br>
+    <button (click)="showChart('pie')"><i class="fa fa-pie-chart" style="color: rebeccapurple;"></i></button>
+    <button (click)="showChart('line')"><i class="fa fa-line-chart" style="color:blue;"></i></button>
+    <button (click)="showChart('bar')"><i class="fa fa-bar-chart" style="color: brown;"></i></button>
+    <div class="card-body">
+        <div  *ngIf="bar"  class="chart-wrapper">
+            <canvas baseChart class="chart" [colors]="barChartColors" [datasets]="barChartData"
+                [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+                [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"
+                style="display: block;width: 947px;height: 482px;" width="750" height="450"></canvas>
+        </div>
+    </div>
+    <div *ngIf="pie" class="card-body">
+        <div class="chart-wrapper">
+            <canvas baseChart class="chart" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+                (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+        </div>
+    </div>
+    <div  *ngIf="line"  class="card-body">
+        <div class="chart-wrapper">
+            <canvas baseChart class="chart" [datasets]="lineChartData" [labels]="lineChartLabels"
+                [options]="lineChartOptions" [colors]="lineChartColours" [legend]="lineChartLegend"
+                [chartType]="lineChartType" (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)"></canvas>
+        </div>
+    </div>
+</div>

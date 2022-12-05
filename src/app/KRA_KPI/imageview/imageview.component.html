@@ -1,0 +1,62 @@
+<!-- <app-header></app-header> -->
+
+<span class="material-icons" (click)="ImgViewSlice.show()">
+    add
+</span>
+
+<div bsModal #ImgViewSlice="bs-modal" [config]="{ backdrop: 'static' }" class="modal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>Upload - <button type="button" class="close" (click)="ImgViewSlice.hide()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button></h4>
+
+                <div class="container">
+                    <form #AddForm="ngForm">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="name">File </label>
+                            <div class="col-md-8 text-center">
+                                <input (change)="upload($event)" type="file" />
+                                <pdf-viewer [src]="file" [render-text]="true" style="display: block;"></pdf-viewer>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="desc">Image </label>
+                            <div class="col-md-8 text-center">
+                                <div class="image-upload" >
+                                    <img [src]="url" height="25px" /> <br />
+                                    <label for="file-input">
+                                        <img src="../../../assets/img/upload.jpg" height="30"/>
+                                    </label>
+                                    <input id="file-input" type="file" (change)="onSelectFile($event)"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="select1">DOC or Image for? </label>
+                            <div class="col-md-8">
+                                <input id="desc" name="desc" class="form-control" required (ngModel)="Add.desc"
+                                    #desc="ngModel" ngModel>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-5">
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-outline-danger"
+                                (click)="myModal.hide(); UpdateName.resetForm()">Cancel</button>
+                        </div>
+                        <div class="col-3">
+                            <button type="button" class="btn btn-success" [disabled]="UpdateName.invalid"
+                                *ngIf="modalClose"
+                                (click)="onEdit(UpdChklistName); UpdateName.resetForm()">Change</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+.material-icons{
+    font-size: 45px;
+    background-color: #38cae1;
+    border-radius: 50%;
+    position: relative;
+    margin-top: 50%;
+    left: 90%;
+}
+.form-control{
+    height: calc(3.5em + 1.75rem + 2px);
+}
+.image-upload > input
+{
+    display: none;
+}
+
+.image-upload img
+{
+    width: 36px;
+    cursor: pointer;
+    border: 1px solid black;
+}

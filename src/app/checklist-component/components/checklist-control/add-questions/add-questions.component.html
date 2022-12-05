@@ -1,0 +1,108 @@
+<div class="container-fluid mt-2">
+    <form #heroForm="ngForm" style="color: #3177b3;">
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label" for="name">Question </label>
+            <div class="col-md-4">
+                <input id="name" name="name" class="form-control" required (ngModel)="hero.name" #name="ngModel"
+                    ngModel>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                    <div *ngIf="name.errors.required">
+                        Question is required. </div>
+                </div>
+            </div>
+            <label class="col-md-2 col-form-label" for="desc">Description </label>
+            <div class="col-md-4">
+                <input id="desc" name="desc" class="form-control" required (ngModel)="hero.desc" #desc="ngModel"
+                    ngModel>
+                <div *ngIf="desc.invalid && (desc.dirty || desc.touched)" class="alert alert-danger">
+                    <div *ngIf="desc.errors.required">
+                        Description is required.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-2 col-form-label" for="select1">Answer Format </label>
+            <div class="col-md-4">
+                <select id="select1" name="select1" class="form-control" (change)="AnsFor($event.target.value)" ngModel>
+                    <option value="Please select">Please Select...</option>
+                    <option value="Checkbox">Checkbox</option>
+                    <option value="Text">Text</option>
+                    <option value="Dropdown">Dropdown</option>
+                    <option value="Radio Button">Radio Button</option>
+                </select>
+            </div>
+            <label class="col-md-2 col-form-label" for="ValidValues">Valid Values </label>
+            <div class="col-md-4">
+                <textarea class="form-control" id="ValidValues" name="ValidValues" rows="2" (ngModel)="hero.ValidValues"
+                    #ValidValues="ngModel" required placeholder="Type Here.." ngModel></textarea>
+                <span class="span1">Enter Coma seperated values (CSV)</span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="textarea-input">Is Image Required </label>
+            <div class="col-md-3">
+                <input type="radio" name="result" value="Yes" (change)="ImgReq($event.target.value)" #Isimg="ngModel"
+                    required ngModel>
+                <label for="Yes">Yes</label>
+                <input type="radio" name="result" value="No" (change)="ImgReq($event.target.value)" #Isimg="ngModel"
+                    required ngModel>
+                <label for="No">No</label>
+            </div>
+            <label class="col-md-3 col-form-label" for="textarea-input">Is Question Compulsory </label>
+            <div class="col-md-3">
+                <input type="radio" name="QuestRes" value="Yes" #Isquest="ngModel"
+                    (change)="QuestionComp($event.target.value)" required ngModel>
+                <label for="Yes">Yes</label>
+                <input type="radio" name="QuestRes" value="No" #Isquest="ngModel"
+                    (change)="QuestionComp($event.target.value)" required ngModel>
+                <label for="No">No</label>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <label class="col-form-label" for="Frequency">Set Frequency </label>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-4  my-1">
+                <input type="number" min="1" id="Frequency" name="Frequency" class="form-control" #frequency="ngModel" required
+                    ngModel>
+            </div>
+            <div class="col-md-4 my-1">
+                <select id="select" #select (change)="Duration($event.target.value,frequency)" class="wrapper-21">
+                    <option value="Please select">Please select</option>
+                    <option value="Day">Day</option>
+                    <option value="Week">Week</option>
+                    <option value="Month">Month</option>
+                </select>
+            </div>
+            <div class="col-md-4 my-1">
+                <div *ngIf="days">
+                    <input *ngFor="let a of timeSlot" type="time" id="id{{a}}" name="time" class="form-control"
+                        #time="ngModel" min="07:00" max="12:00" required placeholder="Time slots" ngModel>
+                </div>
+                <div *ngIf="weeks">
+                    <div *ngFor="let a of Weekdays">
+                        <input (change)="Checkbox($event,a,a)" [checked]="false" type="checkbox" id="a" name=""
+                            value='a' #checkboxes>
+                        <label for="a">{{a}}</label>
+                    </div>
+                </div>
+                <div *ngIf="month">
+                    <input *ngFor="let a of timeSlot" type="date" id="id{{a}}" class="form-control" #date="ngModel"
+                        required placeholder="Time slots" ngModel>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row float-right">
+            <button type="button" class="btn btn-danger mx-2" type="reset" value="reset"
+                (click)="hidedrawer(); heroForm.resetForm()">Close</button>
+            <button type="button" class="btn btn-primary mx-3" type="submit" value="reset"
+                (click)="AddQuestions(name,desc,ValidValues,frequency); heroForm.resetForm()"
+                [disabled]="heroForm.invalid">Add</button>
+        </div>
+    </form>
+
+</div>

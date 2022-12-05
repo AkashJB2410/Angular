@@ -1,0 +1,169 @@
+<!-- ------------ MAIN PAGE  ------------- -->
+<div class="container-fluid">
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <h4 style="color: #3177b3;;">Configure Checklist</h4>
+        </div>
+        <div class="flex-parent jc-center" style="margin-bottom: 1rem;">
+            <button type="submit" class="magenta" (click)="AddChecklistModal.show()"
+                style="font-weight: 500;margin-right: 10px;width: 155px;outline: none;"><img
+                    src="../../../assets/img/add.png" height="15" width="15" style="margin-right: 10px;" /> Add
+                Checklist</button>
+            <div>
+                <button type="submit" class="magenta" (click)="exportexcel()"
+                    style="font-weight: 500;outline: none;"><img src="../../../assets/img/download.png" height="15"
+                        width="15" style="margin-right: 10px;" />Download
+                    Excel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="example-sidenav-content" id="gridbg">
+    <div class="container-fluid mt-2">
+        <app-grid *ngIf="cklist" [isAction]="true" [dataFromComponent]="cklist" [coloums]="ChecklistColoums"
+            [isSearchBar]="true" (onGridSelected)='onSelect($event)'></app-grid>
+    </div>
+</div>
+
+<div bsModal #AddChecklistModal="bs-modal" [config]="{ backdrop: 'static'}" class="modal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form #AddChkForm="ngForm" class="wrapper-20">
+                    <div *ngIf="errormsg" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>CheckList Name</strong> already exists...!
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="Depart">Department</label>
+                        <div class="col-md-8">
+                            <select class="drop" (change)="Department($event.target.value)">
+                                <option [ngValue]="null">Please select</option>
+                                <option *ngFor="let depart of departList">{{depart.item_Description}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="ChecklistName">Checklist Name</label>
+                        <div class="col-md-8">
+                            <input type="text" id="ChecklistName" name="ChecklistName" class="form-control"
+                                #ChecklistName="ngModel" required placeholder="Enter Name..." ngModel>
+                            <div *ngIf="ChecklistName.invalid && (ChecklistName.dirty || ChecklistName.touched)"
+                                class="alert alert-danger">
+                                <div *ngIf="ChecklistName.errors.required">
+                                    Name cannot be empty.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="ChkDesc">Description</label>
+                        <div class="col-md-8">
+                            <input type="text" id="ChkDesc" name="ChkDesc" class="form-control" #ChkDesc="ngModel"
+                                required placeholder="Enter Description..." ngModel>
+                            <div *ngIf="ChkDesc.invalid && (ChkDesc.dirty || ChkDesc.touched)"
+                                class="alert alert-danger">
+                                <div *ngIf="ChkDesc.errors.required">
+                                    Description is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-4 col-form-label" for="text-input">Created By</label>
+                        <div class="col-md-8">
+                            <label class="col-md-9 col-form-label" for="text-input">{{createdBy}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row float-right mr-2">
+                        <button type="button" class="btn btn-danger" (click)="AddChecklistModal.hide()"
+                            style="margin-right: 1rem; border-radius: 0.25rem;">Close</button>
+                        <button type="button" class="btn btn-success"
+                            (click)="AddChecklist(ChecklistName,ChkDesc); AddChkForm.resetForm()">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------- Edit Checklist Name --------------->
+<div bsModal #myModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>Update Checklist Name -</h6>
+                <form #UpdateName="ngForm">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="Name">Name </label>
+                        <div class="col-md-9">
+                            <label for="text-input"><b>{{seletedchecklistname}}</b></label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <input type="text" id="UpdChklistName" name="UpdChklistName" class="form-control"
+                                #UpdChklistName="ngModel" required placeholder="Enter New Name..." ngModel>
+                        </div>
+                        <div *ngIf="UpdChklistName.invalid && (UpdChklistName.dirty || UpdChklistName.touched)"
+                            class="alert alert-danger">
+                            <div *ngIf="UpdChklistName.errors.required">
+                                Name cannot be empty.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                        </div>
+                        <div class="col-10">
+                            <button type="button" class="btn btn-outline-danger"
+                                (click)="myModal.hide(); UpdateName.resetForm()">Cancel</button>
+                            <button type="button" class="btn btn-success" [disabled]="UpdateName.invalid"
+                                *ngIf="modalClose"
+                                (click)="onEdit(UpdChklistName); UpdateName.resetForm()">Change</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'static'}" class="modal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialoge modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body my-1">
+                <h5 class="modal-title"
+                    style="color: #3177b3; margin-bottom: 1rem;text-align: center;font-weight: bold;">CheckList Name -
+                    <u style="font-size: 20px;font-weight: 900;"> {{selectedname}}</u> 
+                </h5>
+                <app-show-questions *ngIf="showmodal" (closelargemodal)="hidelargemodal($event)" [data]="chkId">
+                </app-show-questions>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #genericModal="bs-modal" class="modal right" tabindex="-1" role="dialog"
+    aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-side modal-top-right" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>Are you sure you want to delete this CheckList ?</h6><br>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-8">
+                        <button type="button" class="btn text-center" (click)="genericModal.hide()"
+                            style="background-color: #3066be; margin-bottom: 1rem;">Cancel</button>
+                        <button type="button" class="btn text-center"
+                            style="background-color: #3066be; margin-bottom: 1rem;"
+                            (click)="DeleteChecklist()">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

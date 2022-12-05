@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="mt-5">
+    <app-grid *ngIf="subCheckLits" (onGridSelected)="onSelect($event)" [isDropDown]="true"
+    [dataFromComponent]="subCheckLits"  [isSearchBar]="true" [coloums]="columns" title="Search"></app-grid>
+  </div>
+</div>
+
+<div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'true'}" class="modal fade" tabindex="-1"
+  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialogue" role="document">
+    <div class="modal-content">
+      <div class="modal-header header">
+        <h4 class="modal-title">CheckList</h4>
+        <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-checklist-appQuesAns *ngIf="largeMod" [subQuestionsAns]="subQuestionsAns" [isDropDown]="true" [QueAnsData]="chkId" (Result)="result($event)">
+        </app-checklist-appQuesAns>
+      </div>
+    </div>
+  </div>
+</div>

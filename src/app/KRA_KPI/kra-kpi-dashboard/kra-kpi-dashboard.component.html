@@ -1,0 +1,133 @@
+<div class="container">
+
+    <div class="row" style="margin-top: 10px;">
+        <div class="col-md-3" style="margin-left: 20px;">
+            <label class="navbar-brand" style="color: #151616; font-size: 16px; font-weight: 500;"> Designation:</label>
+            <select style=" width: 100%; padding: 4px; font-size: 15px;  border-radius: 10px;
+        " (change)="RoleSelect($event.target.value)" class="firstDrop">
+                <option value="null">Please select</option>
+                <option *ngFor="let role of Roles">{{role}}</option>
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label class="navbar-brand" style="color: #151616; font-size: 16px; font-weight: 500;"> Employee
+                List:</label>
+            <select style=" width: 100%; padding: 4px; font-size: 15px;  border-radius: 10px;
+        " class="firstDrop">
+                <option value="null">Please select</option>
+                <option *ngFor="let Emp of Employee">{{Emp.EmployeeName}}</option>
+            </select>
+        </div>
+        <div class="col-md-4" style="margin-top: 39px;">
+            <input type="text" style="margin-bottom: 8px;" class="wrapper-8" [(ngModel)]="searchText"
+                placeholder="Search" />
+        </div>
+    </div>
+    <div class="container">
+        <h5 class="wrapper-1">Log History</h5>
+        <div class="table-responsive">
+            <table class="table" id="Configureexcel" #table>
+                <thead>
+                    <tr class="wrapper-6">
+                        <th>KRA Name</th>
+                        <th>Created By</th>
+                        <th>Create Date</th>
+                        <th>Deleted By</th>
+                        <th>Delete Date</th>
+
+                </thead>
+                <tbody>
+                    <tr (click)="Kra(kra)" *ngFor="let kra of kraList | filter:searchText | paginate : {
+                    itemsPerPage: tableSize,
+                    currentPage: page,
+                    totalItems: count
+                  };
+                  let i = index">
+
+                        <td id="{{i}}">
+                            <strong style="font-size: 12px;">{{kra.Goals}}</strong>
+
+                        </td>
+                        <td id="{{i}}">
+                            <strong style="font-size: 12px;">{{kra.CreatedBy}}</strong>
+
+                        </td>
+                        <td id="{{i}}">
+                            <strong style="font-size: 12px;">{{kra.CreatedDate}}</strong>
+
+                        </td>
+                        <td id="{{i}}">
+                            <strong style="font-size: 12px;">{{kra.DeletedBy}}</strong>
+                        </td>
+                        <td id="{{i}}">
+                            <strong style="font-size: 12px;">{{kra.DeletedOn}}</strong>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-center">
+                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)">
+                </pagination-controls>
+            </div>
+        </div>
+        <div *ngIf="hrapprovalconfigure">
+            <h5 class="wrapper-1">Approve/Reject KRA</h5>
+            <div class="col-md-6" style="margin-top: 15px;margin-right: 10px;">
+                <input type="text" style="margin-bottom: 8px;" class="wrapper-8" [(ngModel)]="searchTex"
+                    placeholder="Search" />
+            </div>
+            <div class="table-responsive">
+                <table class="table" id="Configureexcel" #table>
+                    <thead>
+                        <tr class="wrapper-6">
+
+                            <th>KRA Name</th>
+                            <th>Description</th>
+                            <th>Department</th>
+                            <th>Approve</th>
+                            <th>Reject</th>
+
+                    </thead>
+                    <tbody>
+                        <tr (click)="Kra(kra)" *ngFor="let kra of kraList | filter:searchTex | paginate : {
+                itemsPerPage: tableSize,
+                currentPage: page,
+                totalItems: count
+              };
+              let i = index">
+                            <!-- <th scope="row">{{ (page - 1) * 10 + i +1 }}</th> -->
+                            <td id="{{i}}">
+                                <strong style="font-size: 12px;">{{kra.Goals}}</strong>
+
+                            </td>
+                            <td id="{{i}}">
+                                <strong style="font-size: 12px;">{{kra.Description}}</strong>
+                            </td>
+                            <td id="{{i}}">
+                                <strong style="font-size: 12px; text-transform: lowercase;">{{kra.Department}}</strong>
+
+                            </td>
+                            <td id="{{i}}">
+                                <button type="" (click)="approveReject(kra,1)" value="1"
+                                    class="btn btn-wrapper1">Approve</button>
+
+                            </td>
+                            <td id="{{i}}">
+                                <button type="" (click)="approveReject(kra,2)" value="2"
+                                    class="btn btn-wrapper2">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-center">
+                    <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                        (pageChange)="onTableDataChange($event)">
+                    </pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,128 @@
+<div class="wrapper">
+    <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo" 
+        >
+        <mdb-navbar-brand><a class="navbar-brand" style="font-weight: bold;">Center Management</a></mdb-navbar-brand>
+
+        <links class="wrapper1">
+            <ul class="navbar-nav float-right">
+                <!-- <li class="nav-item avatar dropdown" dropdown>
+                    <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light"
+                        mdbWavesEffect>
+                        <span class="material-icons">person</span><span class="caret"></span></a>
+                    <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+                        <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/dashboard">Dashboard</a>
+                        <a class="dropdown-item waves-light" mdbWavesEffect (click)="LogoutModal.show()">Log out</a>
+                    </div>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link waves-light" title="Dashboard" routerLink="/dashboard" mdbWavesEffect><span class="material-icons">dashboard</span>
+                        </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" title="Logout" (click)="LogoutModal.show()" mdbWavesEffect><span class="material-icons">logout</span>
+                        </a>
+                </li>
+            </ul>
+        </links>
+    </mdb-navbar>
+</div>
+<div class="container">
+    <div class="row" style="margin-top: 2rem;">
+        <div class="col-md-1">
+            <label class="navbar-brand" href="#"> State :</label>
+        </div>
+        <div class="col-md-3">
+            <select (change)="LoadAllCentres($event.target.value)" class="firstDrop">
+                <option [ngValue]="null">Please select</option>
+                <option *ngFor="let c of stateNames">{{c.name}}</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label class="navbar-brand" href="#"> Centers:</label>
+        </div>
+        <div class="col-md-4">
+            <select class="SecondDrop" (change)="Centres($event.target.value)">
+                <option [ngValue]="null">Please select</option>
+                <option *ngFor="let details of loadCentres" [value]="details.centerCode">{{details.centerName}}
+                </option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row" *ngIf="LoadForm">
+        <label class="col-md-4 col-form-label" for="Floor">Enter Total number of Floors in centre:</label>
+        <div class="col-sm-4">
+            <input id="Floor" name="Floor" placeholder="Enter total number of floors in centre" class="form-control"
+                required #Floor>
+            <div *ngIf="Floor.invalid && (Floor.dirty || Floor.touched)" class="alert alert-danger">
+                <div *ngIf="Floor.errors.required">
+                    Floor is required.
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <button (click)="onClickOpenForm(Floor)" class="btn btn-primary my-2">Add Details</button>
+        </div>
+    </div>
+
+    <div *ngIf="openform" style="margin-top: 2rem;">
+        <form #DetailsForm="ngForm">
+
+            <div class="form-group row">
+                <label class="col-md-2 col-form-label" for="FloorName">Enter Floor Name:</label>
+                <div class="col-sm-3">
+                    <input id="FloorName" name="FloorName" placeholder="Enter FloorName name" class="form-control"
+                        required (ngModel)="DetailsForm.FloorName" #FloorName="ngModel">
+                    <div *ngIf="FloorName.invalid && (FloorName.dirty || FloorName.touched)" class="alert alert-danger"
+                        ngmodel>
+                        <div *ngIf="FloorName.errors.required">
+                            Floorname is compulsary...!
+                        </div>
+                    </div>
+                </div>
+                <label class="col-md-2 col-form-label" for="rooms">Rooms :</label>
+                <div class="col-sm-3">
+                    <input id="rooms" name="rooms" type="number" class="form-control" required
+                        (ngModel)="DetailsForm.rooms" #rooms="ngModel" placeholder="Enter number of rooms" ngmodel>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-light" (click)="Checklistdetails(FloorName,rooms)">Add</button>
+                </div>
+            </div>
+            <div class="form-group row my-2">
+                <div class="col-md-4" *ngFor="let a of y">
+                    <input type="text" class="form-control" id="room{{a}}" placeholder="Enter room name">
+                </div>
+            </div>
+            <button class="btn btn-success" type="submit" [disabled]="DetailsForm.invalid"
+                (click)="AddRooms() ; DetailsForm.resetForm()">Submit</button>
+
+        </form>
+    </div>
+
+</div>
+<div bsModal #LogoutModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal right" tabindex="-1" role="dialog"
+    aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>Are you sure you want to log-out?</h6><br>
+                <div class="row">
+                    <div class="col-5"></div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="LogoutModal.hide()">Cancel</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-danger" routerLink="/login">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,17 @@
+<!----------- OTP ------------>
+<div class="o-c" >
+    <div style="text-align: center;">
+        <p class="a-o-i">Enter verification code</p>
+        <ng-otp-input #ngOtpInput  (onInputChange)="onOtpChange($event)" [config]="{length:4}" ></ng-otp-input>
+        <div *ngIf="OTPmsg" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>OTP is incorrect..!</strong>
+        </div>
+    </div>
+</div>
+<div class="row float-right mr-4">
+    <span style="font-size: 11px; color: black;" *ngIf="!getOtp" >Resend OTP in :{{timeLeft}} s</span>
+</div>
+<div class="modal-footer" >
+    <button type="button"  class="btn btn-secondary m-1" style="width: 100%;" *ngIf="getOtp" (click)="GetOTPFromUser()">Get OTP</button>
+    <button type="button" class="btn btn-success m-1" style="width: 100%;" (click)="OTPVerification()" >Verify</button>
+</div>

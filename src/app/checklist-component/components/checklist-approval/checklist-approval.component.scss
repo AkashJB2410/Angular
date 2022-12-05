@@ -1,0 +1,84 @@
+.center{
+    margin: auto;
+    width: 50%;
+    border:3px solid gray;
+    padding:10px;
+}
+.center{
+    margin: auto;
+    width: 50%;
+    border:3px salmon orange;
+    padding:10px;
+}
+.btn-block {
+    display: inline;
+    width: 50%;
+}
+.form-control {
+    
+    width: 50%;
+}
+.wrapper-1{
+    padding-left: 10rem;
+}
+
+
+.Approve , .Submitted , .Rejected {
+    margin: 1rem;
+    border:1px solid currentColor;
+    padding: 0.5rem;
+  }
+  
+  .Approve{
+   color: green
+  }
+  
+  .Submitted {
+  color: yellowgreen
+  }
+  
+  .Rejected{
+    color: red
+  }
+
+  .otpheader{
+    padding-left: 2rem;
+    color:white;
+  }
+  .wrapper-8{
+    background-color: #3177b3;
+  }
+  .modal-body {
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+}
+@media only screen and (max-width: 600px) {
+    .wrapper-1 {
+        padding:0px;
+    }
+  }
+
+  textarea {
+    overflow: auto;
+    resize: none;
+}
+
+.wrapper-2{
+    margin-top: 1rem;
+    text-align: center;
+}
+.wrapper-7{
+    border-bottom: 2px solid;
+    border-color:#14bbc0;
+    padding-bottom: 1rem;
+
+}
+.modal-header{
+  color: white!important;
+  background-color: #3177b3!important;
+}
+.close{
+  color: white;
+    opacity: 1;
+    font-size: x-large;
+}

@@ -1,0 +1,21 @@
+<!-- <div *ngIf="ExcelExport" class="filter">
+  <button class="custom-btn btn-12" (click)="exportexcel()"><span style="color: white;
+        font-weight: 400;">click here</span><span style="color: white;font-weight: 400;">Excel
+      Download</span></button>
+</div> -->
+<!-- <div class="flex-parent jc-center" style="margin-bottom: 1rem;"> -->
+
+<!-- 
+  <div>
+      <button type="submit" class="green" (click)="exportexcel()" style="font-weight: 500;"><img
+              src="../../../assets/img/download.png" height="15" width="15"
+              style="margin-right: 10px;" />Download
+          Excel</button>
+  </div> -->
+<!-- </div> -->
+<div class="container">
+  <div class="mt-5">
+    <app-grid *ngIf="chcklisthistory" (onGridSelected)="onSelect($event)" [isDropDown]="true"
+      [dataFromComponent]="chcklisthistory" [coloums]="columns" title="Search"></app-grid>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+// If you want to add something do it here
+@import "custom";
+.modal-header{
+	color: white!important;
+	background-color: #3177b3!important;
+  }
+  .close{
+	color: white;
+	  opacity: 1;
+	  font-size: x-large;
+  }
+  .close:not(:disabled):not(.disabled):hover, .close:not(:disabled):not(.disabled):focus {
+    opacity: 1;
+    color: red;
+}

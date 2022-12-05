@@ -1,0 +1,85 @@
+<!-----select options------->
+
+<div class="container">
+  <div class="row" style="margin-top: 1rem;">
+
+    <div class="col-4">
+      <label class="navbar-brand" href="#"> State :</label>
+      <select (change)="LoadAllCentres($event.target.value)" class="firstDrop">
+        <option [ngValue]="null">Please select</option>
+        <option *ngFor="let c of stateNames">{{c.name}}</option>
+      </select>
+    </div>
+
+    <div class="col-7 SecondDrop">
+      <label class="navbar-brand" href="#"> Centers:</label>
+      <select (change)="LoadEmpList($event.target.value)" class="SecondDrop">
+        <option [ngValue]="null">Please select</option>
+        <option *ngFor="let details of loadCentres" [value]='details.centerCode'>{{details.centerName}}</option>
+      </select>
+    </div>
+
+
+  </div>
+</div>
+
+<div class="container">
+  <div class="row" style="margin-top: 1rem;">
+    <!-- <div class="col-4 SecondDrop">
+            <label for="Date">Date:</label>
+            <input type="date" name="date">
+          </div>  -->
+    <div class="col-5 SecondDrop">
+      <label class="navbar-brand" href="#">Checklist</label>
+      <select (change)="Depart($event.target.value)" class="SecondDrop">
+        <option [ngValue]="null">Please select</option>
+        <option *ngFor="let chk of cklist" [value]='chk.CheckListName'>{{chk.CheckListName}}</option>
+      </select>
+    </div>
+    <div class="col-4 SecondDrop">
+      <label class="navbar-brand" href="#">Select</label>
+      <select (change)="Range($event.target.value)" class="SecondDrop">
+        <option [ngValue]="null">Please select</option>
+        <option [ngValue]="null">Today-{{ today | date:'short' }}</option>
+        <option [ngValue]="null">Yesterday-{{ yesterday | date:'short' }}</option>
+        <option value="Date Range">Date Range</option>
+        <!-- <option *ngFor="let details of Department" [value]='details.item_Type'>{{details.item_Type}}</option> -->
+      </select>
+    </div>
+    <div class="row" *ngIf="date">
+      <div class="col-4">
+        <label for="Date">Start Date:</label>
+        <input (change)="Startdate($event.target.value)" type="date" name="date">
+      </div>
+
+      <div class="col-4 SecondDrop">
+        <label for="Date">End Date:</label>
+        <input (change)="Enddate($event.target.value)" type="date" name="date">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="centerSelected">
+  <app-employee-list [selectedState]="selectedState" [loadlist]='empList' [centerid]='centerid'></app-employee-list>
+</div>
+
+<!-----doughnut chart----->
+
+<div class="card-body">
+  <div class="chart-wrapper">
+    <canvas baseChart class="chart" [data]="doughnutChartData" [labels]="doughnutChartLabels"
+      [chartType]="doughnutChartType" (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+  </div>
+</div>
+<!-- [colors]="donutColors" -->
+
+<!-- <mat-form-field appearance="fill">      
+    <mat-label>Enter a date range</mat-label>      
+    <mat-date-range-input [rangePicker]="picker">      
+      <input matStartDate placeholder="Start date" formControlName="start">  
+          <input matEndDate placeholder="End date" formControlName="end">  
+    </mat-date-range-input>      
+    <mat-datepicker-toggle matSuffix [for]="picker"><mat-error>Date Range is mandatory</mat-error> </mat-datepicker-toggle>      
+    <mat-date-range-picker #picker></mat-date-range-picker>      
+  </mat-form-field>  -->

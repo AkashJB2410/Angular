@@ -1,0 +1,125 @@
+.wrapper-1 {
+    width: 45px;
+    height: 25px;
+    text-align: center;
+}
+.wrapper-3 {
+    // color: #666;
+    // background-color: #fff;
+    // border-color: #c6d2d9;
+    color: #fff;
+    background-color: #3177b3;
+    border-color: #ffffff;
+}
+.wrapper-2 {
+    margin-left: -5px !important;
+    margin-top: 20px;
+}
+.wrapper-4 {
+    margin-left: 1rem;
+}
+.wrapper-5 {
+    margin-top: 1rem;
+    font-size: 14px;
+}
+.body {
+    background-color: #f2f6f8;
+}
+.wrapper-6 {
+    background-color: #3177b3;
+    color: white;
+    text-align: justify;
+}
+.th {
+    color: #333;
+}
+.btn-wrapper {
+    color: #fff;
+    background-color: #3177b3;
+    border-color: #e4eaee;
+}
+.btn-wrapper:hover {
+    background-color: #04a9f4;
+}
+.cl-btn-group > .cl-btn:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.cl-btn-outline-light:disabled {
+    color: #666;
+    background: #e4eaee;
+}
+.cl-calendar-btn-zoom {
+    display: flex;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    width: 2.1429rem;
+    height: 2.1429rem;
+    font-size: 2rem;
+    line-height: 1;
+}
+select {
+    color: black;
+    font-weight: 700;
+    width: 80%;
+    height: 25px;
+}
+.commColor {
+    color: green;
+}
+.wrapper-7 {
+    font-family: inherit;
+    font-weight: 600;
+    line-height: 1.5;
+}
+.wrapper-8 {
+    text-align: center;
+}
+.badge{
+    font-size: 13px;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #e5e5e5;
+}
+.wrapper-9 {
+    background-color: #b5c2da;
+}
+.wrapper-10 {
+    color: black;
+    font-weight: 700;
+}
+.aside {
+    background-color: #33b5e5;
+    padding: 15px;
+    color: #ffffff;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.material-icons{
+    margin-left: 6px;
+    margin-top: 6px;
+    font-size: 15px;
+}
+.table th,
+.table td {
+    padding: 0.25rem;
+}
+.table-bordered thead th, .table-bordered thead td {
+    border-bottom-width: 5px;
+    text-align: center;
+}
+@media only screen and (max-width: 760px), (min-width: 768px) and (max-width: 1024px) {
+    /* ... */
+    select {
+        width: 90px;
+    }
+    [class*="col-"] {
+        width: 100%;
+    }
+}
+
+.wrapper-11 {
+    filter: invert(26%) sepia(89%) saturate(1583%) hue-rotate(95deg) brightness(96%) contrast(106%);
+}

@@ -1,0 +1,126 @@
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-body">
+      <app-grid *ngIf="employeeCheckLits" (onGridSelected)="onSelect($event)" [dataFromComponent]="employeeCheckLits" [coloums]="coloums"></app-grid>
+    </div>
+  </div>
+</div>
+
+<!---------------------- Answer Submit Modal ------------------->
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg " style="width: 65%;" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header header">
+        <h4 class="modal-title" style="text-align: center; color: white;"> Check List</h4>
+        <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form action="" enctype="multipart/form-data" class="form-horizontal">
+          <div class="form-group row">
+            <strong class="col-md-3 col-form-label">Check List Name -</strong>
+            <label class="col-md-3 col-form-label">{{checklistName}}</label>
+            <strong class="col-md-3 col-form-label">Submitted for -</strong>
+            <input class="form-check-input" class="col-md-2" type="text"  style="height: 40px;" #subfor>
+          </div>
+
+          <div class="form-group row wrapper-7">
+            <strong class="col-md-3 col-form-label">Date -</strong>
+            <label class="col-md-3 col-form-label">{{checklistDate}}</label>
+            <strong class="col-md-3 col-form-label">Employee For -</strong>
+            <label class="col-md-3 col-form-label">{{userdata.username}}</label>
+          </div>
+          <div *ngIf="errormsg" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>All fields are compulsory..!</strong>
+          </div>
+
+
+          <!-----static---->
+
+          
+          <div class="container">
+            <div class="form-group row wrapper-5" *ngFor="let ques of checkQuestion">
+              <label class="col-md-6" for="text-input" style="font-weight: 490;"><b>Q
+                  :&nbsp;</b>{{ques.Question}}</label>
+
+              <div class="col-md-6" *ngIf="ques.QuestionType === 'Text'">
+                <div class="form-group row">
+                  <b>A :</b>
+                  <div class="col-md-10">
+                    <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text"
+                      (change)="onchange($event.target, ques)" style="    border-color: #00000073;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 wrapper-4 " *ngIf="ques.QuestionType === 'Radio Button'">
+                <div class="form-group row"><b>A : </b>
+                  <div class="form-check " style="margin:auto;" *ngFor="let anss of splitValidValues(ques.ValidValues)">
+                    <input class="form-check-input" type="radio" name="{{ques.QuestionId}}" id="{{ques.QuestionId}}" [value]="anss"
+                      (change)="onchange($event.target,ques)">
+                    <label class="form-check-label" for="radio1"> {{anss}}</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6" *ngIf="ques.QuestionType === 'Dropdown'">
+                <div class="form-group row">
+                  <b>A :</b>
+                  <div class="col-md-10">
+                    <select id="select1" name="select1" class="form-control" style="    border-color: #00000073;"
+                      (change)="AddDataJson(ques.QuestionId,$event.target.value,ques.QuestionType)">
+                      <option *ngFor="let anss of splitValidValues(ques.ValidValues)" [value]="anss"
+                        (change)="onchange($event.target,ques)">{{anss}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6" *ngIf="ques.QuestionType === 'Checkbox'">
+                <div class="form-group row"><b>A :</b>
+                  <div class="form-check wrapper-3" *ngFor="let anss of splitValidValues(ques.ValidValues)">
+                    <input class="form-check-input" type="checkbox" [value]="anss" id="checkbox1"
+                      (change)="onchange($event.target, ques)" style="    border-color: #00000073;">
+                    <label class="form-check-label" for="checkbox1" style="font-weight: 490;">
+                      {{anss}}
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="col-md-3" *ngIf="ques.IsImageRequired === 'Yes'" style="display:flex">
+                <div class="col-md-4">
+                  <span *ngIf="message">{{message}}</span>
+                  <input #file type="file" accept='image/*' (change)="preview(file.files)" /><span
+                    style="color: red;">*</span>
+                  <img [src]="imgURL" height="100" *ngIf="imgURL">
+                </div>
+              </div> -->
+
+            </div>
+          </div>
+          <div class="col-md-12" style="margin-top: 2rem;">
+            <div class="form-group row">
+              <div class="col-md-6">
+                <label for="comment"><b>Additional Comments:</b></label>
+              </div>
+              <textarea rows="3" cols="43" style="resize: none;" #addComments> </textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer" style="background-color: #14bbc0">
+        <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="getAnswer(addComments,subfor)"
+          style="background-color: white; color: black;">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+

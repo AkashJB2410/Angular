@@ -1,0 +1,101 @@
+<div class="container mt-1">
+    <button class="btn float-right  mr-3 mt-1" style="color: white; background-color: #3177b3;" (click)="largeModal.show()" type="submit">Create
+        Task</button>
+    <app-grid *ngIf="TaskList" [Heading]="heading" [isSearchBar]="true" [Department]="" [coloums]="coloums"
+        [dataFromComponent]="TaskList" [action]=true></app-grid>
+</div>
+
+<div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'static'}" class="modal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Add Task for {{Depart}}</h4>
+            </div>
+            <div class="modal-body my-1">
+                <h5 class="modal-title" style="color: #3177b3; margin-bottom: 1rem;"></h5>
+                <form #AddTaskForm="ngForm" class="wrapper-20">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="Depart">Department</label>
+                        <div class="col-md-9">
+                            <select #select class="drop py-1" (change)="Department($event.target.value)">
+                                <option value="Please select">Please select</option>
+                                <option *ngFor="let depart of departList">{{depart.item_Description}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="TaskName">Task </label>
+                        <div class="col-md-9">
+                            <input type="text" id="TaskName" name="TaskName" class="form-control" #TaskName="ngModel"
+                                required placeholder="Enter Name..." ngModel>
+                            <div *ngIf="TaskName.invalid && (TaskName.dirty || TaskName.touched)"
+                                class="alert alert-danger">
+                                <div *ngIf="TaskName.errors.required">
+                                    Name cannot be empty.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="TaskDesc">Description</label>
+                        <div class="col-md-9">
+                            <input type="text" id="TaskDesc" name="TaskDesc" class="form-control" #TaskDesc="ngModel"
+                                required placeholder="Enter Description..." ngModel>
+                            <div *ngIf="TaskDesc.invalid && (TaskDesc.dirty || TaskDesc.touched)"
+                                class="alert alert-danger">
+                                <div *ngIf="TaskDesc.errors.required">
+                                    Description is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="text-input">Created By</label>
+                        <div class="col-md-9">
+                            <label class="col-md-9 col-form-label" for="text-input">{{createdBy}}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="row float-right mr-2">
+                    <button type="button" class="btn btn-danger" (click)="largeModal.hide()"
+                        style="margin-right: 1rem; border-radius: 0.25rem;">Close</button>
+                    <button type="button" class="btn btn-success"
+                        (click)="AddTask(TaskName,TaskDesc); AddTaskForm.resetForm()">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #genericModal="bs-modal"  class="modal right" tabindex="-1" role="dialog"
+    aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-side modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: unset;">
+                <div class="col-1"></div>
+                <div class="col-10 text-center">
+                    <h5 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                        <p style="color: white;">Delete Task</p>
+                    </h5>
+                </div>
+                <div class="col-1 ms-3">
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <h6>Are you sure you want to delete <p style="font-size: 17px;color: red;">{{Taskname}}</p>
+                </h6><br>
+                <div class="row">
+                    <div class="col-1"></div>
+                    <div class="col-10">
+                        <button type="button" class="btn btn-success" (click)="genericModal.hide()">Cancel</button>
+                        <button type="button" (click)="DeleteTasks();genericModal.hide()" class="btn btn-danger px-4">Yes</button>
+                    </div>
+                    <div class="col-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

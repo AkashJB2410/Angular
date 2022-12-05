@@ -1,0 +1,31 @@
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  /*background: #eee; */
+}
+.col-md-9 col-lg-6 col-xl-5{
+   padding:30px;
+   margin:30px;
+}
+.span{
+    color:rgb(235, 69, 69);
+
+}
+.vh-100{
+    background-color:lightblue;
+}
+.h-custom {
+  height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+  .h-custom {
+    height: 100%;
+  }
+}
+
+.app-body{
+  margin-top:120px;
+
+}

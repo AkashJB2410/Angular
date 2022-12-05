@@ -1,0 +1,32 @@
+<div class="container" style="margin-top: 3rem;">
+    <div class="row">
+        <div class="col-md-3" *ngFor="let dept of Department">
+            <div class="card l-bg-blue-dark w-130" style="cursor: pointer;">
+                <div class="align-items-center">
+                    <div class="py-2">
+                        <p class="deatilInfoEmp text-center" title="Assign Checklist" (click)="onEmpClick(emp)"><b
+                                style="color: #fdfeff;">{{dept.Department}}</b></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- popup to see assigned tasks --> -->
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Task List</h4>
+                <button type="button" class="close" (click)="onCloseClick()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <app-emp-task *ngIf="isEmpSelected" [centerId]="centerId" [EmployeeDetails]="empDetail"></app-emp-task>
+            </div>
+        </div>
+    </div>
+</div> 

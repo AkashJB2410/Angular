@@ -1,0 +1,77 @@
+<!-----select options------->
+
+<div class="container">
+  <div class="row" style="margin-top: 1rem;">
+      <div class="col-4">
+          <label class="navbar-brand" href="#"> State :</label>
+          <select (change)="LoadAllCentres($event.target.value)" class="firstDrop">
+              <option [ngValue]="null">Please select</option>
+              <option *ngFor="let c of stateNames">{{c.name}}</option>
+          </select>
+      </div>
+
+      <div class="col-7 SecondDrop">
+          <label class="navbar-brand" href="#"> Centers:</label>
+          <select   (change)="LoadEmpList($event.target.value)" class="SecondDrop">
+              <option [ngValue]="null">Please select</option>
+              <option #center *ngFor="let details of loadCentres" [value]='details.centerCode'>{{details.centerName}}</option>
+          </select>
+      </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row" style="margin-top: 1rem;">
+      <!-- <div class="col-4 SecondDrop">
+            <label for="Date">Date:</label>
+            <input type="date" name="date">
+          </div>  -->
+      <!-- <div class="col-5 SecondDrop">
+          <label class="navbar-brand" href="#">Checklist</label>
+          <select (change)="Depart($event.target.value)" class="SecondDrop">
+              <option [ngValue]="null">Please select</option>
+              <option *ngFor="let chk of cklist" [value]='chk.CheckListName'>{{chk.CheckListName}}</option>
+          </select>
+      </div> -->
+
+      <div class="col-4 SecondDrop">
+          <label class="navbar-brand" href="#">Select</label>
+          <select (change)="Range($event.target.value)" class="SecondDrop">
+              <option value="Please select">Please select</option>
+              <option value="Today">Today-{{ today | date:'short' }}</option>
+              <option value="Yesterday">Yesterday-{{ yesterday | date:'short' }}</option>
+              <option value="Date Range">Date Range</option>
+              <!-- <option *ngFor="let details of Department" [value]='details.item_Type'>{{details.item_Type}}</option> -->
+          </select>
+      </div>
+
+      <div class="row" *ngIf="date">
+          <div class="col-4">
+              <label for="Date">Start Date:</label>
+              <input (change)="Startdate($event.target.value)" type="date" name="date">
+          </div>
+
+          <div class="col-4 SecondDrop">
+              <label for="Date">End Date:</label>
+              <input (change)="Enddate($event.target.value)" type="date" name="date">
+          </div>
+      </div>
+  </div>
+</div>
+
+<div *ngIf="centerSelected">
+  <app-employee-list [selectedState]="selectedState" [loadlist]='empList' [centerid]='centerid'></app-employee-list>
+</div>
+
+<!-----doughnut chart----->
+
+<div class="card-body" *ngIf="chart">
+  <div class="chart-wrapper">
+      <strong>
+          <h3>Total Checklist-{{totalchecklist}}</h3>
+      </strong>
+      <canvas baseChart class="chart" [colors]="donutColors" [data]="doughnutChartData" [labels]="doughnutChartLabels"
+          [chartType]="doughnutChartType" (chartHover)="chartHovered($event)"
+          (chartClick)="chartClicked($event)"></canvas>
+  </div>
+</div>

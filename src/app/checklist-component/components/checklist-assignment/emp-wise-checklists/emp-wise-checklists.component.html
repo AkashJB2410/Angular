@@ -1,0 +1,115 @@
+<!-- pop up window content for employee wise checklist -->
+<div class="container">
+    <div class="row my-2">
+        <div class="">
+            <h5>Employee Name:{{empDetails.EmployeeName}}</h5>
+        </div>
+        <!-- <div class="col-4 text-right">
+            <form class="d-flex">
+                <input class="form-control me-2 mx-1" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
+        </div> -->
+    </div>
+    <app-grid *ngIf="cklist" [dataFromComponent]="cklist" [coloums]="coloums"></app-grid>
+
+        <div class="button-1"> 
+            <button _ngcontent-hly-c189="" cbutton="" color="primary" tabindex="0" type="button" role="button"
+                class="btn btn-block btn-success" (click)="infoAssign.show()">Assign </button>
+               </div>
+    
+</div>
+<!-- pop up window content for employee wise checklist -->
+
+
+<!-- assign Screen -->
+<div bsModal #infoAssign="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-info modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Assign Checklist </h4>
+                <!-- <button type="button" class="close" (click)="infoAssign.hide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> -->
+            </div>
+            <div class="modal-body">
+                <!-- <div class="row" style="justify-content: space-around;"> -->
+                
+                    <div class="">
+                        <select (change)="onDropdownChange($event.target.value)"  class="wrapper-10">
+                            <option [ngValue]="null">Select Checklist</option>
+                            <option *ngFor="let c of checklistName" [value]='c.CheckListId'
+                                (click)="primaryModal.show()">
+                                {{c.CheckListName}}</option>                         
+                        </select>
+                        
+                    </div>
+                    <div class="">
+                        
+                        <ng-multiselect-dropdown [placeholder]="'Select Floor'" [data]="dropdownList"
+                            [(ngModel)]="selectedItems" [settings]="dropdownSettings" (onSelect)="roomEntries()"
+                            (onSelectAll)="onSelectAll($event)" (onDeSelect)="roomEntries()"
+                            (onDeSelectAll)="onUnSelectAll()">
+                        </ng-multiselect-dropdown>
+                    </div>
+                    
+                    <div class="" style="margin-top: 1rem;">
+                        <ng-multiselect-dropdown [placeholder]="'Select Rooms'"
+                            [data]=" dropdownList2 " [(ngModel)]="selectedItems2" [settings]="dropdownSettings2"
+                            (onSelect)="onItemSelect2($event)" (onSelectAll)="onSelectAll2($event)"
+                            (onDeSelect)="onItemDeSelect2($event)" (onDeSelectAll)="onUnSelectAll2()">
+                        </ng-multiselect-dropdown>
+                    </div>
+                <!-- </div>                -->
+            </div>
+            <div class="modal-footer">                 
+                <div class="">
+                    <button type="button" class="btn" style="background-color: #3177b3; color: white; margin-bottom: 1rem;" (click)="infoAssign.hide()" aria-label="Close">
+                        <span aria-hidden="true">Close</span>
+                    </button> 
+                    <button type="button" class="btn" style="background-color: #3177b3; color: white; margin-bottom: 1rem;" (click)="Assignchecklist()" aria-label="Close" data-target=".bd-example-modal-sm">
+                        <span aria-hidden="true">Add</span>
+                    </button> 
+                    <!-- <a mdbBtn color="success" class="waves-light" (click)="showSuccess()" mdbWavesEffect><button
+                            type="button" (click)="  Assignchecklist() " data-target=".bd-example-modal-sm" class="btn btn-primary">ADD</button></a> -->
+                             
+                                  
+                </div>
+               
+            </div>
+            
+        </div>
+    </div>
+</div>
+<!-- assign Screen -->
+
+<!-- Alert box  before deleting checklist -->
+<div bsModal #deleteAss="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>You want to delete this CheckList ?</h6><br>
+                <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="deleteAss.hide()">Cancel</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-danger" (click)="RemoveAssignedChecklist()">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+
+
+  

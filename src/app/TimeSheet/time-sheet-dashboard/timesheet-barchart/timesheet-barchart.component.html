@@ -1,0 +1,52 @@
+<!-------Main charts------>
+
+<div class="container">
+  <div class="card-body">
+    <button (click)="showChart('bar')" title="Bar-Chart"><i class="fa fa-bar-chart" style="color: brown;"></i></button>
+    <button (click)="showChart('pie')" title="Pie-Chart"><i class="fa fa-pie-chart"
+        style="color: rebeccapurple;"></i></button>
+    <button (click)="showChart('line')" title="Line-Chart"><i class="fa fa-line-chart" style="color:blue;"></i></button>
+  </div>
+  <div *ngIf="bar" class="chart-wrapper">
+    <canvas baseChart class="chart" [colors]="barChartColors" [datasets]="barChartData" [labels]="barChartLabels"
+      [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"
+      (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"
+      style="display: block;width: 947px;height: 482px;" width="750" height="450"></canvas>
+  </div>
+  <div *ngIf="pie" class="card-body">
+    <div class="chart-wrapper">
+      <canvas baseChart class="chart" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+        (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+    </div>
+  </div>
+  <div *ngIf="line" class="card-body">
+    <div class="chart-wrapper">
+      <canvas baseChart class="chart" [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+        [colors]="lineChartColours" [legend]="lineChartLegend" [chartType]="lineChartType"
+        (chartHover)="chartHovered($event)" (chartClick)="chartClicked($event)"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-----popup barchart---->
+
+<div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Task</h4>
+        <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-----popup barchart end---->

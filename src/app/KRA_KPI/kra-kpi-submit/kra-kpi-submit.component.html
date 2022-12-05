@@ -1,0 +1,341 @@
+<!-- <div class="container"> -->
+<div style="overflow-x: hidden;">
+  <div class="container">
+    <div class="row" style="margin-top: 1rem;">
+      <div class="col-md-4">
+        <label style="color:black ;font-size: 15px;font-weight: 600;">Select:</label>
+        <input type="month" id="" name="" style="border: 1px solid #3177b3;
+        border-radius: 5px;" (change)="Getmonthwisekra($event.target.value)">
+      </div>
+      <div class="col-md-8">
+        <div *ngIf="!DisableAssignKPI">
+          <h6 style="font-weight:bold">Employee Name : {{NAME.username}}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="!spanmsg" style="text-align: center;margin-top: 20px; ">
+    <span style="color:red;font-size: 17px;">No data to display...! Contact KDPL Admin</span>
+  </div>
+
+  <div class="m-2" *ngIf="spanmsg">
+    <loading *ngIf="isLoading"></loading>
+    <div class="container">
+      <div *ngIf="!manager">
+        <div class="row" style="margin-bottom:1rem;">
+          <div class="col-md-6">
+            <input type="text" class="wrapper-8" [(ngModel)]="searchText" placeholder="Search" />
+          </div>
+          <div class="col-md-3">
+            <label style="color:black ;font-size: 15px;font-weight: 600;">Status:</label>
+            <span style="color:rgb(0, 59, 148);font-size: 15px; font-weight: bold;">{{managerStatus}}</span>
+          </div>
+          <div class="col-md-3">
+            <label style="color:black ;font-size: 15px;font-weight: 600;">Progress:</label>
+            <!-- <span style="color:rgb(0, 59, 148);font-size: 15px; font-weight: bold;">{{WorkStatus}}</span> -->
+            <!-- <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%" aria-valuemin="0" aria-valuemax="100">{{WorkStatus}}</div> -->
+            <label>{{overallStatus +"%"}}</label>
+            <mat-progress-bar mode="determinate" value="{{overallStatus}}">{{overallStatus}}</mat-progress-bar>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div style="overflow-x:auto;">
+      <table id="Assignexcel" style="font-size: 12px;" #table>
+        <thead style="text-align: center; 
+        height: 45px;">
+          <tr class="wrapper-6">
+            <th>KRA's</th>
+            <th>KPI's</th>
+            <th>Weightage</th>
+            <th>ACHIEVED</th>
+            <th>SCORE</th>
+            <th *ngIf="!manager">FILES</th>
+            <th>STATUS</th>
+            <th *ngIf="!DisableAssignKPI">Rating(M)</th>
+            <th *ngIf="!DisableAssignKPI">Remarks(M)</th>
+            <th *ngIf="!DisableAssignKPI"> Rating(HR)</th>
+            <th *ngIf="!DisableAssignKPI">Remarks(HR)</th>
+          </tr>
+        </thead>
+        <tbody class="table">
+          <tr (click)="Kra(kra)" *ngFor="let kra of kralist| filter:searchText | paginate : {
+            itemsPerPage: tableSize,
+            currentPage: page,
+            totalItems: count
+          };, let i = index">
+            <td style="width:80%" id="{{i}}">
+              <strong style="font-size: 13px;">{{kra.KRA}}</strong>
+              <!-- <p>{{kra.KRA}}</p> -->
+            </td>
+            <td id="{{i}}">
+
+              <div class="grow-wrap">
+                <textarea class="input" rows="2" onInput="this.parentNode.dataset.replicatedValue = this.value"
+                  [disabled]='user' (blur)="FillKPI(kra,$event.target.value,i)">{{kra.KPI}}</textarea>
+              </div>
+
+            </td>
+            <td id="{{i}}">
+
+              <div>
+                <textarea class="input" style="width:50px;border-radius: 6px;height: 37px; resize: none;" rows="2"
+                  onInput="this.parentNode.dataset.replicatedValue = this.value" [disabled]='user'
+                  (blur)="Fillweightage(kra,$event.target.value,i)">{{kra.weightage}}</textarea>
+              </div>
+
+            </td>
+            <td id="{{i}}">
+              <div class="grow-wrap">
+
+                <textarea class="input" rows="2" onInput="this.parentNode.dataset.replicatedValue = this.value"
+                  [disabled]='manager' (blur)="FillAcchieved(kra,$event.target.value,i)">{{kra.Achieved}}</textarea>
+              </div>
+              <h6 style="
+    font-size: 10px;
+    margin-top: 5px;
+">(Press Enter for bigger field)</h6>
+
+            </td>
+            <td id="{{i}}" class="my-auto">
+              <p>{{kra.Score}}</p>
+            </td>
+            <td id="{{i}}" *ngIf="!manager">
+              <a>
+                <!-- <span class="badge badge-danger" id="{{i}}">{{kra.Attachments.length}}</span> -->
+                <span class="material-icons" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Upload Files"
+                  style="color:#3177b3; cursor: pointer;" (click)="handleClick1(i, kra)">
+                  upload
+                </span>
+              </a>
+              <!-- <input class="hidden" type="file" id="upload-file" name="upload-file" (change)="uploadFile($event,kra)"
+                [disabled]='manager' multiple> -->
+            </td>
+            <td id="{{i}}">
+              <div *ngIf="kra.WorkStatus == ''; else SelectNext">
+                <select #selectBox [disabled]='manager' class="statuS" (change)="onSelection($event.target.value ,i)"
+                  style="width: 103px;">
+                  <option value="-- Select --">-- Select --</option>
+                  <option *ngFor="let sta of StatusArray1" value="{{sta.Id}}">{{sta.Status}}</option>
+                </select>
+              </div>
+              <ng-template #SelectNext>
+                <select #selectBox [disabled]='manager' class="statuS" (change)="onSelection($event.target.value ,i)"
+                  style="width: 103px;">
+                  <option value="-- Select --">{{kra.WorkStatus}}</option>
+                  <option *ngFor="let sta of StatusArray2" value="{{sta.Id}}">{{sta.Status}}</option>
+                </select>
+              </ng-template>
+            </td>
+            <td *ngIf="!DisableAssignKPI" id="{{i}}">
+              <select #selectBox [disabled]='!DisableAssignKPI' style="text-align: center;"
+                (change)="managerRating($event.target.value ,i)">
+                <option value="-- Select --">{{kra.MarkByManager}}</option>
+                <option *ngFor="let sta of Rating" value="{{sta.Id}}">{{sta.Rating}}</option>
+              </select>
+            </td>
+            <td *ngIf="!DisableAssignKPI" id="{{i}}">
+              <div class="grow-wrap">
+                <textarea class="wrapper-10" rows="2" onInput="this.parentNode.dataset.replicatedValue = this.value"
+                  [disabled]='!DisableAssignKPI' (blur)="managerRemark($event.target.value,i)" style="width: 82px;
+                  height: 50px;">{{kra.RemarkByManager}}</textarea>
+              </div>
+            </td>
+            <td *ngIf="!DisableAssignKPI" id="{{i}}">
+
+              <select #selectBox style="text-align: center;" [disabled]='!DisableAssignKPI'
+                (change)="AdminRating($event.target.value ,i)">
+                <option value="-- Select --">{{kra.MarksHRAdmin}}</option>
+                <option *ngFor="let sta of Rating" value="{{sta.Id}}">{{sta.Id}}</option>
+              </select>
+            </td>
+            <td *ngIf="!DisableAssignKPI" id="{{i}}">
+              <textarea class="wrapper-10" rows="2" [disabled]='!DisableAssignKPI' style="width: 95px;
+              height: 50px;" (blur)="AdminRemark($event.target.value,i)">{{kra.RemarkByHRAdmin}}</textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-center">
+        <pagination-controls previousLabel="Prev" class="my-pagination" nextLabel="Next"
+          (pageChange)="onTableDataChange($event)">
+        </pagination-controls>
+      </div>
+      <button #SaveBtn type="button" class="magenta m-2" style="color: white; background-color: #3177b3; float: right;"
+        class="btn float-right m-2" (click)="Send(SaveBtn)" *ngIf="!user">Save</button>
+
+
+      <button type="button" class="magenta m-2" style="color: white; background-color: #3177b3; float: right;"
+        *ngIf="!manager" (click)="largeModal.show()"><img src="../../../assets/img/attach.png" width="16px"> View
+        Attachments</button>
+      <div *ngIf="isMonth">
+        <button type="button" class="magenta m-2" style="color: white; background-color: #3177b3; float: right;"
+          (click)="SaveKRAKPI()" *ngIf="!manager" [disabled]="btndisabled">Save Data</button>
+        <button type="button" class="magenta m-2" style="color: white; background-color: #3177b3; float: right;"
+          (click)="SubmitForApproval()" [disabled]="btndisabled" *ngIf="!manager"><img
+            src="../../../assets/img/approval.png" width="16px"> Submit For Approval</button>
+      </div>
+      <div *ngIf="ExcelExport">
+        <button type="submit" class="magenta m-2" title="Download
+       Excel" (click)="exportexcel()" style="font-weight: 500;outline: none ; float: right;"><img
+            src="../../../assets/img/download.png" height="15" width="15" style="margin-right: 10px;" />Download
+          Excel</button>
+      </div>
+
+
+
+    </div>
+
+    <div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'static'}" class="modal" tabindex="-1" role="dialog"
+      aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>View Files</h4>
+            <button type="button" class="close  wrapper1012" (click)="largeModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body my-2">
+            <!-- <div class="content" *ngFor="let kra of kralist">
+              <h4 style="color: rgb(174, 101, 243);"><strong>{{kra.KRA}}</strong></h4>
+              <img *ngFor="let attach of kra.Attachments" [src]="attach.File" multiple="multiple" height="100" width=""
+                style="padding:7px;">
+              <hr style="border: 1px solid #ca9ef3;">
+            </div> -->
+            <div class="content" *ngFor="let kra of kralist">
+              <h6 style="color:rgb(49 119 179);"><strong>{{kra.KRA}}</strong></h6>
+              <div *ngFor="let attach of kra.Attachments" (click)="openImage(attach.File)">
+                <ng-container *ngIf="attach.File.includes('.pdf'); else docs">
+                  <img src="../../../assets/img/pdf.png" height="100" width="" style="padding:7px;">
+                  <small>{{attach.File.split("/")[4]}}</small>
+                </ng-container>
+
+                <ng-template #docs>
+                  <ng-container *ngIf="attach.File.includes('.docx'); else excel">
+                    <img src="../../../assets/img/word.png " height="100" width="" style="padding:7px;">
+                    <small>{{attach.File.split("/")[4]}}</small>
+                  </ng-container>
+                </ng-template>
+                <ng-template #excel>
+                  <ng-container *ngIf="attach.File.includes('.xlsx'); else png">
+                    <img src="../../../assets/img/excel.png " height="100" width="" style="padding:7px;">
+                    <small>{{attach.File.split("/")[4]}}</small>
+                  </ng-container>
+                </ng-template>
+                <ng-template #png>
+                  <ng-container>
+                    <img [src]="attach.File" multiple="multiple" height="100" width="" style="padding:7px;">
+                    <small>{{attach.File.split("/")[4]}}</small>
+                  </ng-container>
+                </ng-template>
+              </div>
+              <!-- <img *ngFor="let attach of kra.Attachments" (click)="openImage(attach.File)" [src]="attach.File" height="100" width=""
+                style="padding:7px;"> -->
+              <hr style="border-bottom: 1px solid #3177b3;">
+            </div>
+            <div class="row float-right">
+              <button type="button" class="btn btn-wrapperdanger mx-2" (click)="largeModal.hide()">Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div bsModal #largeModal1="bs-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="overlay" *ngIf="popup">
+        <div class="modal-dialogue modal-dialog-centered" role="document">
+          <div class="container">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4>View Files</h4>
+                <button type="button" class="close-button topright" style="font-size:2rem;" aria-label="Close"
+                  (click)="largeModal1hide(); popup = false">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body my-2">
+                <div class="container">
+                  <div class="row">
+                    <div class="row">
+                      <div class="col-sm-12 productAddfromImages">
+
+                        <!-- <div class="content" *ngFor="let kra of kralist"> -->
+
+                        <div *ngFor="let img of selectedimages; let i = index">
+                          <ng-container *ngIf="img.File.includes('.pdf'); else docs">
+                            <img src="../../../assets/img/pdf.png" height="100" width="" style="padding:7px;">
+                            <small>{{img.File.split("/")[4]}}</small>
+                          </ng-container>
+
+                          <ng-template #docs>
+                            <ng-container *ngIf="img.File.includes('.docx'); else excel">
+                              <img src="../../../assets/img/word.png " height="100" width="" style="padding:7px;">
+                              <small>{{img.File.split("/")[4]}}</small>
+                            </ng-container>
+                          </ng-template>
+                          <ng-template #excel>
+                            <ng-container *ngIf="img.File.includes('.xlsx'); else png">
+                              <img src="../../../assets/img/excel.png " height="100" width="" style="padding:7px;">
+                              <small>{{img.File.split("/")[4]}}</small>
+                            </ng-container>
+                          </ng-template>
+                          <ng-template #png>
+                            <ng-container>
+                              <img [src]="img.File" multiple="multiple" height="100" width="" style="padding:7px;">
+                              <small>{{img.File.split("/")[4]}}</small>
+                            </ng-container>
+                          </ng-template>
+                          <!-- <ng-template #image>
+                            <ng-container>
+                              <img [src]="img.File" multiple="multiple" height="100" width="" style="margin: 7px;"> 
+                            </ng-container>
+                          </ng-template> -->
+                          <button class="btn btn-danger" (click)="delete(img.AttachmentId ,i)"
+                            style="margin: 3px;">Delete</button>
+                        </div>
+                        <!-- <div class="content" *ngFor="let kra of kralist">
+                <h4 style="color: rgb(174, 101, 243);"><strong>{{kra.KRA}}</strong></h4>
+                <img *ngFor="let attach of kra.Attachments" [src]="attach.File" multiple="multiple" height="100" width=""
+                  style="padding:7px;">
+                <hr style="border: 1px solid #ca9ef3;">
+              </div> -->
+                        <!-- </div> -->
+
+                      </div>
+                    </div>
+                    <div class="" style="text-align: center;">
+                      <br>
+                      <label class="form-label" style="text-align: center;
+                        margin-left: 2rem;">Add Files / Images</label>
+                      <input type="file" class="" (change)="uploadFile($event)" multiple accept="image/*" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <div class="form-group row float-right">
+                  <!-- <button type="button" class="btn btn-danger mx-2" (click)="largeModal1hide();popup = false">Close
+                  </button> -->
+                  <button type="button" id="p1" class="magenta m-2"
+                    style="color: white; background-color: #3177b3; float: right;"
+                    (click)="SaveKRAKPI();largeModal1.hide()" *ngIf="!manager" [disabled]="btndisabled">save</button>
+                </div>
+                <!-- <div class="form-group row float-right">
+            <button type="button" class="btn btn-danger mx-2" (click)="selectedimages = [];popup = false">Close
+            </button>
+          </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

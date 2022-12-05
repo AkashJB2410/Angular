@@ -1,0 +1,77 @@
+<div class="wrapper">
+    <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark indigo">
+        <mdb-navbar-brand><a class="navbar-brand" style="font-weight: bold; color: white; cursor: pointer;">KRA-KPI
+            </a></mdb-navbar-brand>
+        <links class="wrapper1">
+            <ul class="navbar-nav mr-auto" style="font-weight: 400;">
+             
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'kra-kpi-configure'}"
+                        (click)="isActivated('kra-kpi-configure')" mdbWavesEffect>Configure<span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'kra-kpi-assign'}" (click)="isActivated('kra-kpi-assign')"
+                        mdbWavesEffect>Assignment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessUser" [ngClass]="{isActive : active === 'kra-submit'}"
+                        (click)="isActivated('kra-submit')" mdbWavesEffect>Submit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'kra-kpi-approval'}" (click)="isActivated('kra-kpi-approval')"
+                        mdbWavesEffect>Approval</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" *ngIf="AccessAdmin"
+                        [ngClass]="{isActive : active === 'kra-kpi-dashboard'}"
+                        (click)="isActivated('kra-kpi-dashboard')" mdbWavesEffect> Employee List<span
+                            class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link waves-light" title="Dashboard" routerLink="/dashboard" mdbWavesEffect><span
+                            class="material-icons">dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link waves-light" title="Logout" (click)="LogoutModal.show()" mdbWavesEffect><span
+                            class="material-icons">logout</span>
+                    </a>
+                </li>
+            </ul>
+        </links>
+    </mdb-navbar>
+</div>
+
+<app-time-task *ngIf="active === 'time-task'"></app-time-task>
+<app-kra-kpi-configure *ngIf="active === 'kra-kpi-configure'"></app-kra-kpi-configure>
+<app-kra-kpi-assign *ngIf="active === 'kra-kpi-assign'"></app-kra-kpi-assign>
+<app-kra-kpi-submit *ngIf="active === 'kra-submit'"></app-kra-kpi-submit>
+<app-kra-kpi-approval *ngIf="active === 'kra-kpi-approval'"></app-kra-kpi-approval>
+<app-kra-kpi-dashboard *ngIf="active === 'kra-kpi-dashboard'"></app-kra-kpi-dashboard>
+
+<div bsModal #LogoutModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal right" tabindex="-1" role="dialog"
+    aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>Are you sure you want to log-out?</h6><br>
+                <div class="row" style="float: right;">
+                   
+                    <div class="col-5">
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="LogoutModal.hide()">No</button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-danger" routerLink="/login">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

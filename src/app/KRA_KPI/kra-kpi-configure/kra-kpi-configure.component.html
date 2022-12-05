@@ -1,0 +1,285 @@
+<div class="container" style="margin-top: 2rem;">
+
+    <!-- <div>
+        <app-grid *ngIf="kraList" [coloums]="column" [dataFromComponent]="kraList" [action]="true"></app-grid>
+    </div> -->
+    <input type="text" class="wrapper-8" [(ngModel)]="searchText" placeholder="Search" />
+    <div class="flex-parent jc-center" style="margin-bottom: 1rem;">
+        <button type="submit" class="magenta" title="ADD KRA"(click)="largeModal.show()"
+            style="font-weight: 500;margin-right: 10px;width: 150px; outline: none;"><img src="../../../assets/img/add.png" height="18"
+                width="18" style="margin-right: 10px;" /> ADD KRA</button>
+
+        <div *ngIf="ExcelExport" >
+            <button type="submit" class="magenta" title="Download
+            Excel" (click)="exportexcel()" style="font-weight: 500;outline: none"><img
+                    src="../../../assets/img/download.png" height="15" width="15" style="margin-right: 10px;" />Download
+                Excel</button>
+        </div>
+
+    </div>
+
+    <div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'static'}" class="modal" tabindex="-1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="display: initial;">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <img src="../../../assets/img/add.png" width="24px" alt="Photo of sunset">
+                        </div>
+                        <div class="col-md-4">
+                            <strong style="color: #dee7e9 ; font-size: 15px;" class="modal-title">ADD KRA </strong>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body my-2">
+                    <form #KraForm="ngForm">
+                        <div class="row">
+                            <label class="col-md-4 col-form-label" for="Goal">Goal/Title</label>
+                            <input type="text" style=" padding: 0.625rem 0.75rem;" name="Goal" value="Goal"
+                                class="form-control" #Goal="ngModel" required ngModel id="Goal"><br>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label" for="Desc">Description</label>
+
+                            <textarea class="form-control" id="Comm" name="Comm" rows="5" cols="35"
+                                style="color: black; resize: none;" #Desc="ngModel" required placeholder="Add Description"
+                                ngModel></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="Attachment Required">Attachment Required</label><br>
+                                <input type="radio" name="Yes_No" value="1" (change)="Attach($event.target.value)"
+                                    #IsQuest="ngModel" required ngModel>
+                                <label for="Yes">Yes</label>
+                                <input type="radio" name="Yes_No" value="0" (change)="Attach($event.target.value)"
+                                    #IsQuest="ngModel" required ngModel>
+                                <label for="No">No</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="created by">Department</label><br>
+                                <select class="drop" name="dept" value="dept" style="width: 80%;"
+                                    (change)="Department($event.target.value)" #IsQuest="ngModel" required ngModel>
+                                    <option [ngValue]="null">Please select</option>
+                                    <option *ngFor="let depart of departList">{{depart.item_Type}}</option>
+                                </select>
+                                <!-- <ng-multiselect-dropdown  (change)="Department($event.target.value)"  [placeholder]="'Select Department'" [data]="departList" #IsQuest="ngModel" required ngModel
+                                [(ngModel)]="depart" [settings]="dropdownSettings">
+                              </ng-multiselect-dropdown> -->
+        
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="Attachment Required">Take Data From</label><br>
+                                <input type="radio" name="ERP_Manual" value="1"
+                                    (change)="TakeDataFrom($event.target.value)" #IsQuest="ngModel" required ngModel>
+                                <label for="Yes">ERP</label>
+                                <input type="radio" name="ERP_Manual" value="0"
+                                    (change)="TakeDataFrom($event.target.value)" #IsQuest="ngModel" required ngModel>
+                                <label for="No">Manual</label>
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="text-input">Created By</label>
+                                <label style=" font-weight: bold;" class="created"
+                                    for="text-input">{{createdBy}}</label>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" style="color: white; background-color: #3177b3; padding: 8px 25px;"
+                                class="btn"
+                                (click)="AddKra(Goal.value,Desc.value);KraForm.resetForm()">Create
+                            </button>
+                            <button type="button" style="color: white; background-color: #777d83; padding: 8px 25px;"
+                                class="btn" type="reset" value="reset"
+                                (click)="largeModal.hide();KraForm.resetForm()">Cancel
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+
+
+    <div bsModal #genericModal="bs-modal" class="modal right" tabindex="-1" role="dialog"
+        aria-labelledby="genericModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-side modal-top-right" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h6>Are you sure you want to delete this Kra ?</h6><br>
+                    <div class="row">
+                        <div class="col-4"></div>
+                        <div class="col-4">
+                            <button class="wrapper-12" style="border: none;"
+                                (click)="genericModal.hide()">Cancel</button>
+                        </div>
+                        <div class="col-3">
+                            <button id="remove" class="wrapper-13" style="border: none;"
+                                (click)="deleteKra()">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table" id="Configureexcel" #table>
+            <thead>
+                <tr class="wrapper-6">
+                    <th>Sr.No</th>
+                    <th>Goal</th>
+                    <th>Description</th>
+                    <th>Department</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+
+            </thead>
+            <tbody>
+                <tr (click)="Kra(kra)" *ngFor="let kra of kraList | filter:searchText | paginate : {
+                itemsPerPage: tableSize,
+                currentPage: page,
+                totalItems: count
+              };
+              let i = index">
+              <th scope="row">{{ (page - 1) * 10 + i +1 }}</th>
+                    <td  id="{{i}}">
+                        <strong style="font-size: 13px;">{{kra.Goals}}</strong>
+
+                    </td>
+                    <td id="{{i}}" >
+                        <strong style="font-size: 13px;">{{kra.Description}}</strong>
+                    </td>
+                    <td  id="{{i}}">
+                        <strong style="font-size: 13px; text-transform: lowercase;">{{kra.Department}}</strong>
+
+                    </td>
+                    <td  id="{{i}}">
+                        <img src="../../../assets/img/writing.png" title="Edit" (click)="Editbtn(kra)"
+                            style="width: 18px; height: 18px; cursor: pointer;">
+                        <!-- <button type="button" class="btn float-right m-2" style="color: rgb(0, 0, 0); background-color: #e0e3e7; float: right;width: 85px;"
+                (click)="Deletebtn(kra.KRAID)"><img src="../../../assets/img/delete (1).png" width="12px"> Delete</button> -->
+                    </td>
+                    <td id="{{i}}">
+                        <img src="../../../assets/img/delete.png" title="Delete" (click)="Deletebtn(kra.KRAID)"
+                            style="width: 18px; height: 18px; cursor: pointer;">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex justify-content-center">
+            <pagination-controls class="my-pagination"
+              previousLabel="Prev"
+              nextLabel="Next"
+              (pageChange)="onTableDataChange($event)"
+            >
+            </pagination-controls>
+        </div>
+    </div>
+
+    <div bsModal #EditkraModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal right" tabindex="-1"
+        role="dialog" aria-labelledby="genericModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-side modal-top-right" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form #KraForm="ngForm">
+                        <h4 style="text-align: center; color: #3177b3;">Edit</h4>
+                        <div class="row">
+                            <label class="col-md-4 col-form-label" for="Goal">Goal/Title</label>
+                            <input type="text" style=" padding: 0.625rem 0.75rem;" name="Goal"
+                                [(ngModel)]="kradetails.Goals" class="form-control" #KRA="ngModel" required ngModel><br>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label" for="Desc">Description</label>
+
+                            <textarea class="form-control" id="Comm" name="Comm" rows="5" cols="35"
+                                style="color: black; resize: none;" #Descp="ngModel" required placeholder="Add Description"
+                                ngModel [(ngModel)]="kradetails.Description"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="Attachment Required">Attachment Required</label><br>
+                                <input type="radio" name="Yes_No" value="1" #IsQuest="ngModel" required ngModel
+                                    (change)="Attach($event.target.value)">
+                                <label for="Yes">Yes</label>
+                                <input type="radio" name="Yes_No" value="0" #IsQuest="ngModel" required ngModel
+                                    (change)="Attach($event.target.value)">
+                                <label for="No">No</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="created by">Department</label><br>
+                                <select class="drop" name="dept" value="dept" style="width: 80%;"
+                                    (change)="Department($event.target.value)" #dept="ngModel" required ngModel>
+                                    <option>--Please Select--</option>
+                                    <option *ngFor="let depart of departList">{{depart.item_Type}}</option>
+                                </select>
+                                <!-- <ng-multiselect-dropdown [placeholder]="'Select Department'" [data]="departList" #IsQuest="ngModel" required ngModel
+                                [(ngModel)]="selectedItems" [settings]="dropdownSettings">
+                              </ng-multiselect-dropdown> -->
+        
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="Attachment Required">Take Data From</label><br>
+                                <!-- <input type="radio" name="ERP_Manual" value="1"
+                                    (change)="TakeDataFrom($event.target.value)" #IsQuest="ngModel" required ngModel>
+                                <label for="Yes">ERP</label><br>
+                                <input type="radio" name="ERP_Manual" value="0"
+                                    (change)="TakeDataFrom($event.target.value)" #IsQuest="ngModel" required ngModel>
+                                <label for="No">Manual</label> -->
+                                <div class="form-check form-check-inline">
+
+                                    <input class="form-check-input" type="radio" name="ERP_Manual" value="1"
+                                        (change)="TakeDataFrom($event.target.value)" #IsQuest="ngModel" required
+                                        ngModel>
+                                    <label for="Yes">ERP</label>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+
+                                    <input class="form-check-input" type="radio" name="ERP_Manual" value="0"
+                                        (change)="TakeDataFrom($event.target.value)" #IsQuest="ngModel" required
+                                        ngModel>
+                                    <label for="No">Manual</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="text-input">Created By</label>
+                                <label style=" font-weight: bold;" class="created"
+                                    for="text-input">{{kradetails.CreatedBy}}</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="">
+                                <button type="button"
+                                    style="color: white; background-color: #25496d; padding: 8px 25px;" class="btn"
+                                    (click)="EditKra(KRA.value , Descp.value );EditkraModal.hide();KraForm.resetForm()">Update
+                                </button>
+                                <button type="button"
+                                    style="color: white; background-color: #777d83; padding: 8px 25px;" class="btn"
+                                    (click)="EditkraModal.hide();KraForm.resetForm()">Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,219 @@
+<div class="container">
+    <div class="row" *ngIf="!IsApproval">
+        <div class="col-sm-6 ">
+            <div *ngIf="!IsApproval">
+                <span class="wrapper-7">Time Period :</span>
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <div class="btn-group" role="group">
+                        <button class=" btn wrapper-3 wrapper-7">
+                            {{start}}-{{end}}
+                        </button>
+                        <div class="wrapper-3">
+                            <button class=" btn wrapper-3" (click)="previousWeek()">
+                                <mat-icon> chevron_left</mat-icon>
+                            </button>
+                        </div>
+                        <button class=" btn wrapper-3" (click)="nextWeek()">
+                            <mat-icon class="pl-0 ml-0">chevron_right</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 ">
+            <label class="wrapper-7">Approver Name:</label>
+            <span style="color: black;
+            font-weight: bold;">{{approverManager}}</span>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px;" *ngIf="!IsApproval">
+        <div class="col-sm-6">
+            <label class="wrapper-7">Timesheet Status:</label>
+            <h6 [ngClass]="StatusCss">{{timeSheetStatus}}</h6>
+        </div>
+        <div class="col-sm-6">
+            <label class="wrapper-7">Last Modified:</label>
+            <span style="color: black;
+            font-weight: bold;">{{lastModifiedDate}}</span>
+        </div>
+    </div>
+    <div class="wrapper-5">
+        <table class="table table-striped table-responsive table-bordered" #table>
+            <thead>
+                <tr class="wrapper-6">
+                    <th style="width: 40px;" title="Add">
+                        <i class="fa fa-plus-circle fa_custom fa-2x" style="color:ffffff" (click)="AddTask()"
+                            *ngIf="!IsApproval"></i>
+                    </th>
+                    <th style="width: 105px;">Project</th>
+                    <th style="width: 105px;">Task</th>
+                    <th *ngFor=" let day of days">{{day}}</th>
+                    <th style="width: 40px;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="text-align: center;" *ngFor="let task of NoofTask; let i = index" #i>
+                    <td><i class="fa fa-minus-circle fa_custom fa-2x " style="color:#b5c2da" (click)="RemoveTask(i)"
+                            *ngIf="!IsApproval"></i>
+                    </td>
+                    <td>
+                        <select class="form-select"
+                            (change)="Projectchange($event.target,selectedprojectlist[i].projectName,i)"
+                            aria-label="Default select" [(ngModel)]="selectedprojectlist[i].projectName" id="{{i}}"
+                            [disabled]='IsApproval'>
+                            <option>{{task.projectName}}</option>
+                            <option *ngFor="let project of ProjectList" [ngValue]="project">{{project.ProjectName}}
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="form-select" (change)="Taskchange($event.target,selectedtasklist[i].taskName,i)"
+                            aria-label="Default select" [(ngModel)]="selectedtasklist[i].taskName" id="{{i}}"
+                            [disabled]='IsApproval'>
+                            <option>{{task.taskName}}</option>
+                            <option *ngFor="let taskName of TaskList" [ngValue]="taskName">{{taskName.TaskName}}
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <input id="Monday" class="wrapper-1 " type="text" (keypress)="keyPressNumbers($event)"
+                            value="{{task.Monday | number : '1.1-2'}}" (blur)="changeHours(task, $event.target,i)"
+                            step="0.01" [disabled]='IsApproval' />
+                        <span class="material-icons" (click)="popup(0,i, 'MonComm')"
+                            [ngClass]="{'commColor' : (task.MonComm !== '' && task.MonComm !== 'NA')}">
+                            message
+                        </span>
+                    </td>
+                    <td><input id="Tuesday" class="wrapper-1" type="text" (keypress)="keyPressNumbers($event)"
+                            value="{{task.Tuesday | number : '1.1-2'}}" (blur)="changeHours(task, $event.target,i)"
+                            [disabled]='IsApproval' />
+                        <span class="material-icons" (click)="popup(1,i, 'TueComm')"
+                            [ngClass]="{'commColor' : (task.TueComm !== '' && task.TueComm !== 'NA')}">
+                            message
+                        </span>
+                    </td>
+                    <td><input id="Wednesday" class="wrapper-1" type="text" (keypress)="keyPressNumbers($event)"
+                            value="{{task.Wednesday | number : '1.1-2'}}" (blur)="changeHours(task, $event.target,i)"
+                            [disabled]='IsApproval' />
+                        <span class="material-icons" (click)="popup(2,i, 'WedComm')"
+                            [ngClass]="{'commColor' : (task.WedComm !== '' && task.WedComm !== 'NA')}">
+                            message
+                        </span>
+                    </td>
+                    <td><input id="Thursday" class="wrapper-1" type="text" (keypress)="keyPressNumbers($event)"
+                            value="{{task.Thursday | number : '1.1-2'}}" (blur)="changeHours(task, $event.target,i)"
+                            [disabled]='IsApproval' />
+                        <span class="material-icons" (click)="popup(3,i, 'ThuComm')"
+                            [ngClass]="{'commColor' : (task.ThuComm !== '' && task.ThuComm !== 'NA')}">
+                            message
+                        </span>
+                    </td>
+                    <td><input id="Friday" class="wrapper-1" type="text" (keypress)="keyPressNumbers($event)"
+                            value="{{task.Friday | number : '1.1-2'}}" (blur)="changeHours(task, $event.target,i)"
+                            [disabled]='IsApproval' />
+                        <span class="material-icons" (click)="popup(4,i, 'FriComm')"
+                            [ngClass]="{'commColor' : (task.FriComm !== '' && task.FriComm !== 'NA')}">
+                            message
+                        </span>
+                    </td>
+                    <td><input id="Saturday" class="wrapper-1" type="text" (keypress)="keyPressNumbers($event)"
+                            value="{{task.Saturday | number : '1.1-2'}}" (blur)="changeHours(task, $event.target,i)"
+                            [disabled]='IsApproval' />
+                        <span class="material-icons" (click)="popup(5,i, 'SatComm')"
+                            [ngClass]="{'commColor' : (task.SatComm !== '' && task.SatComm !== 'NA')}">
+                            message
+                        </span>
+                    </td>
+                    <td><input id="Sunday" class="wrapper-1" type="text" (keypress)="keyPressNumbers($event)"
+                            value="{{task.Sunday | number : '1.1-2'}}" (blur)="changeHours(task, $event.target,i)"
+                            [disabled]='IsApproval' />
+                        <span class="material-icons" (click)="popup(6,i, 'SunComm')"
+                            [ngClass]="{'commColor' : (task.SunComm !== '' && task.SunComm !== 'NA')}">
+                            message
+                        </span>
+                    </td>
+                    <td><input type="text" id="OutputTotal{{i}}" class="wrapper-1 wrapper-9" min="0" max="8"
+                            value="{{task.total}}" disabled /></td>
+                </tr>
+                <tr class="wrapper-10">
+                    <td colspan="3">Total</td>
+                    <td class="wrapper-8"><label>{{totalMon}}</label></td>
+                    <td class="wrapper-8"><label>{{totalTue}}</label></td>
+                    <td class="wrapper-8"><label>{{totalWed}}</label></td>
+                    <td class="wrapper-8"><label>{{totalThu}}</label></td>
+                    <td class="wrapper-8"><label>{{totalFri}}</label></td>
+                    <td class="wrapper-8"><label>{{totalSat}}</label></td>
+                    <td class="wrapper-8"><label>{{totalSun}}</label></td>
+                    <td class="wrapper-8"><span>{{totalHours}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="!IsApproval" class="my-5">
+        <button class="btn btn-primary" (click)="SaveTasks()" [disabled]="btnDisabled"
+            style="margin-right: 4px;">Save</button>
+        <input type="submit" class="btn btn-success" value="Submit for Approval" (click)="genericModal.show()"
+            [disabled]="btnDisabled">
+    </div>
+</div>
+
+<!-- comment popup -->
+<div bsModal #AddComment="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Date</h4>
+                <h4>{{popupdate}}</h4>
+            </div>
+            <div class="modal-body">
+                <form #TextareaForm="ngForm">
+                    <textarea class="form-control" id="Comm" name="Comm" rows="4" cols="35"
+                        style="color: black; resize: none;    border: 1px solid black;" #addComm required
+                        placeholder="Add Comments" ngModel [disabled]='IsApproval'></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" value="Clear" class="btn btn-secondary"
+                    (click)="AddComment.hide();TextareaForm.resetForm()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="Comments(Comm);AddComment.hide()"
+                    *ngIf="!IsApproval">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div bsModal #genericModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal right" tabindex="-1" role="dialog"
+    aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-side modal-top-right" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>Are you sure you want submit timesheet of date range <b style="color: #3177b3;
+                    padding-right: 5px;">{{start}}-{{end}}</b> for Approval ?</h6><br>
+                <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="genericModal.hide()">Cancel</button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-danger" (click)="SubmitForApproval()">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

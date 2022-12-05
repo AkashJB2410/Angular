@@ -1,0 +1,55 @@
+<!-- <div class="container">
+  <div class="row" style="margin-top: 1rem;">
+    
+    <div class="" style="margin-left: 1rem;">
+      <select (change)="LoadAllCentres($event.target.value)" class="firstDrop">
+        <option [ngValue]="null">Select State</option>
+        <option *ngFor="let c of stateNames">{{c.name}}</option>
+      </select>
+    </div>
+
+    <div class="SecondDrop" style="margin-left: 1rem;">
+      <select (change)="LoadEmpList($event.target.value)" class="SecondDrop">
+        <option [ngValue]="null">Select Center</option>
+        <option *ngFor="let details of loadCentres" [value]='details.centerCode'>{{details.centerName}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="centerSelected">
+  <app-employee-list [selectedState]="selectedState" [loadlist]='empList' [centerid]='centerid'></app-employee-list>
+</div> -->
+
+
+
+
+
+<div class="container">
+  <div class="row" style="margin-top: 1rem;">
+    
+    <div class="" style="margin-left: 1rem;">
+      <select (change)="LoadAllCentres($event.target.value)" class="firstDrop">
+        <option [ngValue]="null">Select State</option>
+        <option *ngFor="let c of stateNames">{{c.name}}</option>
+      </select>
+    </div>
+
+    <div class="SecondDrop" style="margin-left: 1rem;">
+      <select (change)="LoadEmpList($event.target.value)" class="SecondDrop">
+        <option [ngValue]="null">Select Center</option>
+        <option *ngFor="let details of loadCentres" [value]='details.centerCode'>{{details.centerName}}</option>
+      </select>
+    </div>
+    <div class="SecondDrop" style="margin-left: 1rem;">
+      <select (change)="cDeptList($event.target.value)" class="SecondDrop">
+        <option [ngValue]="null">Department</option>
+        <option *ngFor="let details of Department" [value]='details.item_Type' >{{details.item_Type}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="centerSelected">
+  <app-employee-list [selectedState]="selectedState"  [loadlist]='empList' [item_Type]='item_Type'></app-employee-list>
+</div>

@@ -1,0 +1,374 @@
+<div bsModal #largeModal1="bs-modal" [config]="{ backdrop: 'static'}" class="modal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="CloseList()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body my-2">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label style="color:black ;font-size: 15px;font-weight: 600;">Select Month:</label>
+                        <input type="month" id="" name="" #datefilter (change)="Getmonthwisekra($event.target.value)">
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Employee Name :{{NAME}}</h6>
+                    </div>
+                </div>
+
+
+                <div *ngIf="spanmsg" style="text-align: center;">
+                    <span style="color:red;font-size: 17px;">Not Submitted Yet...!</span>
+                </div>
+
+                <div class="row" *ngIf="tableShow">
+                    <div class="col-md-4">
+                        <input type="text" style="margin-bottom: 16px;" class="wrapper-8" [(ngModel)]="searchText"
+                            placeholder="Search" />
+                    </div>
+                    <div class="col-md-3">
+                        <label style="color:black ;font-size: 15px;font-weight: 600;">Status:</label>
+                        <span style="color:rgb(0, 59, 148);font-size: 15px; font-weight: bold;">{{managerStatus}}</span>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="flex-parent jc-center" style="margin-bottom: 1rem;">
+                            <button type="submit" class="magenta" title="ADD KRA" (click)="largeModal.show()"
+                                style="font-weight: 500;margin-right: 10px; outline: none;"><img
+                                    src="../../../assets/img/attach.png" width="16px">View Attachments</button>
+
+                            <div *ngIf="ExcelExport">
+                                <button type="submit" class="magenta" title="Download
+                            Excel" (click)="exportexcel()" style="font-weight: 500;outline: none"><img
+                                        src="../../../assets/img/download.png" height="15" width="15"
+                                        style="margin-right: 10px;" />Download
+                                    Excel</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="tableShow">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label style="font-size: 16px;
+                            font-weight: 400;
+                            color: #3177b3;">Manager Rating</label>
+                            <select #selectBox [disabled]='hrapp' class="markManager" style="text-align: center;"
+                                (change)="overallManagerRating($event.target.value)">
+                                <option value="-- Select --">{{MainKraList.MarkByManager}}</option>
+                                <option *ngFor="let sta of Rating" value="{{sta.Id}}">{{sta.Rating}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" style="display: flex;
+                        margin-bottom: 10px;">
+                            <label style="font-size: 16px;
+                            font-weight: 400;
+                            color: #3177b3;">Manager(Remark)</label>
+                            <textarea rows="2" class="wrapper-10" [disabled]='hrapp'
+                                (blur)="overallRemarkByManager($event.target.value)">{{MainKraList.RemarkByManager}}</textarea>
+                        </div>
+
+
+                        <div class="col-md-3" *ngIf="hrapp2">
+                            <label>HR Rating</label>
+                            <select #selectBox style="text-align: center;border-radius: 8px;"
+                                (change)="overallAdminRating($event.target.value ,i)">
+                                <option value="-- Select --">{{MainKraList.MarksHRAdmin}}</option>
+                                <option *ngFor="let sta of Rating" value="{{sta.Id}}">{{sta.Id}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3" *ngIf="hrapp2">
+                            <label>HR Remark</label>
+                            <textarea rows="2" class="wrapper-10"
+                                (blur)="overallAdminRemark($event.target.value,i)">{{MainKraList.RemarkByHRAdmin}}</textarea>
+                        </div>
+                    </div>
+
+                    <table class="table" id="tableid" #table>
+                        <thead>
+                            <tr class="wrapper-6">
+                                <th>KRA's</th>
+                                <th>KPI's</th>
+                                <th>Weightage</th>
+                                <th>Achieved</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Rating(M)</th>
+                                <th>Remarks(M)</th>
+                                <th>Rating(HR)</th>
+                                <th>Remarks(HR)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr (click)="Kra(kra)" *ngFor="let kra of kralist | filter:searchText| paginate : {
+                                itemsPerPage: tableSize,
+                                currentPage: page,
+                                totalItems: count
+                              };let i = index">
+                                <td style="width:80%" id="{{i}}">
+                                    <strong style="color:#3177b3;font-size: 13px;">{{kra.KRA}}</strong>
+                                    <!-- <p>{{kra.KRA}}</p> -->
+                                </td>
+                                <td id="{{i}}">
+                                    <!-- <textarea class="input" rows="2" [disabled]='true'
+                            (blur)="FillKPI(kra,$event.target.value,i)">{{kra.KPI}}</textarea> -->
+                                    <label>{{kra.KPI}}</label>
+                                </td>
+                                <td id="{{i}}">
+                                    <!-- <textarea class="input" rows="2" [disabled]='true'
+                            (blur)="FillKPI(kra,$event.target.value,i)">{{kra.KPI}}</textarea> -->
+                                    <label>{{kra.weightage}}</label>
+                                </td>
+                                <td id="{{i}}">
+                                    <!-- <textarea class="input" rows="2" [disabled]='true'
+                            (blur)="FillAcchieved(kra,$event.target.value,i)">{{kra.Achieved}}</textarea> -->
+                                    <label>{{kra.Achieved}}</label>
+                                </td>
+                                <td id="{{i}}" style="text-align: center;" class="my-auto">
+                                    <p>{{kra.Score}}</p>
+                                </td>
+
+                                <td id="{{i}}">
+                                    <label>{{kra.WorkStatus}}</label>
+                                </td>
+                                <td id="{{i}}">
+                                    <select #selectBox [disabled]='hrapp' style="text-align: center;"
+                                        (change)="managerRating($event.target.value ,i)">
+                                        <option value="-- Select --">{{kra.MarkByManager}}</option>
+                                        <option *ngFor="let dp of kra.dropDown" value="{{dp.rate}}">{{dp.rate}}</option>
+                                    </select>
+                                    
+                                </td>
+                                <td id="{{i}}">
+                                    <div class="grow-wrap">
+                                        <textarea rows="2" [disabled]='hrapp'
+                                            onInput="this.parentNode.dataset.replicatedValue = this.value"
+                                            (blur)="managerRemark($event.target.value,i)">{{kra.RemarkByManager}}</textarea>
+                                    </div>
+                                </td>
+                                <td id="{{i}}">
+                                    <!-- <select #selectBox [disabled]='HRColmn' style="text-align: center;"
+                                        (change)="AdminRating($event.target.value ,i)">
+                                        <option value="-- Select --">{{kra.MarksHRAdmin}}</option>
+                                        <option *ngFor="let sta of Rating" value="{{sta.Id}}">{{sta.Id}}</option>
+                                    </select> -->
+                                    <select #selectBox [disabled]='HRColmn'style="text-align: center;"
+                                    (change)="AdminRating($event.target.value ,i)">
+                                    <option value="-- Select --">{{kra.MarksHRAdmin}}</option>
+                                    <option *ngFor="let dp of kra.dropDown" value="{{dp.rate}}">{{dp.rate}}</option>
+                                </select>
+                                </td>
+                                <td id="{{i}}">
+                                    <div class="grow-wrap">
+                                        <textarea rows="2"
+                                            onInput="this.parentNode.dataset.replicatedValue = this.value"
+                                            [disabled]='HRColmn'
+                                            (blur)="AdminRemark($event.target.value,i)">{{kra.RemarkByHRAdmin}}</textarea>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center">
+                        <pagination-controls previousLabel="Prev" class="my-pagination" nextLabel="Next"
+                            (pageChange)="onTableDataChange($event)">
+                        </pagination-controls>
+                    </div>
+                    <div *ngIf="HR">
+                        <button type="btn" [disabled]='HRdisabled'
+                            style="color: white; background-color: #3177b3; float: right;" class="btn float-right m-2"
+                            (click)="AdminApproval1()"> <img src="../../../assets/img/approval.png" width="20px">
+                            HR Approval
+                        </button>
+                    </div>
+                    <div *ngIf="MANAGER">
+                        <button type="btn" style="color: white; background-color: #3177b3; float: right;"
+                            class="btn float-right m-2" (click)="managerApproval1()"> <img
+                                src="../../../assets/img/approval.png" width="20px">Manager Approval</button>
+
+                    </div>
+                </div>
+                <!-- Excel Download -->
+
+                <div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'static'}" class="modal" tabindex="-1"
+                    role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4>View Files</h4>
+                                <button type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body my-2">
+                                <!-- <div class="content" *ngFor="let kra of kralist">
+                                    <h4 style="color:rgb(49 119 179);"><strong>{{kra.KRA}}</strong></h4>
+                                    <div *ngFor="let attach of kra.Attachments">
+                                        <img [src]="attach.File" (click)="openImage(attach.File)" multiple="multiple"
+                                            height="100" width="" style="padding:7px;">
+                                        <span (click)="downloadImage(attach.File)">Download</span>
+                                        <hr style="border-bottom: 1px solid #3177b3;">
+                                    </div>
+
+                                </div> -->
+                                <div class="content" *ngFor="let kra of kralist">
+                                    <h6 style="color:rgb(49 119 179);"><strong>{{kra.KRA}}</strong></h6>
+                                    <div *ngFor="let attach of kra.Attachments" (click)="openImage(attach.File)">
+                                        <ng-container *ngIf="attach.File.includes('.pdf'); else docs">
+                                            <img src="../../../assets/img/pdf.png" height="100" width=""
+                                                style="padding:7px;">
+                                            <small>{{attach.File.split("/")[4]}}</small>
+                                            <span (click)="downloadImage(attach.File)">Download</span>
+                                        </ng-container>
+
+                                        <ng-template #docs>
+                                            <ng-container *ngIf="attach.File.includes('.docx'); else excel">
+                                                <img src="../../../assets/img/word.png " height="100" width=""
+                                                    style="padding:7px;">
+                                                <small>{{attach.File.split("/")[4]}}</small>
+                                                <span (click)="downloadImage(attach.File)">Download</span>
+                                            </ng-container>
+                                        </ng-template>
+                                        <ng-template #excel>
+                                            <ng-container *ngIf="attach.File.includes('.xlsx'); else png">
+                                                <img src="../../../assets/img/excel.png " height="100" width=""
+                                                    style="padding:7px;">
+                                                <small>{{attach.File.split("/")[4]}}</small>
+                                                <span (click)="downloadImage(attach.File)">Download</span>
+                                            </ng-container>
+                                        </ng-template>
+                                        <ng-template #png>
+                                            <ng-container>
+                                                <img [src]="attach.File" multiple="multiple" height="100" width=""
+                                                    style="padding:7px;">
+                                                <small>{{attach.File.split("/")[4]}}</small>
+                                                <span (click)="downloadImage(attach.File)">Download</span>
+                                            </ng-container>
+                                        </ng-template>
+                                    </div>
+                                    <!-- <img *ngFor="let attach of kra.Attachments" (click)="openImage(attach.File)" [src]="attach.File" height="100" width=""
+                                      style="padding:7px;"> -->
+                                    <hr style="border-bottom: 1px solid #3177b3;">
+                                </div>
+                                <div class="row float-right">
+                                    <button type="button" class="btn btn-danger mx-2" (click)="largeModal.hide()">Close
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row" style="margin-top: 1rem;">
+        <div class="col-md-3">
+            <label class="navbar-brand" style="color: #151616; font-size: 16px; font-weight: 500;"> Designation:</label>
+            <select style=" width: 100%; padding: 4px; font-size: 15px;  border-radius: 10px;
+        " (change)="RoleSelect($event.target.value)" class="firstDrop">
+                <option value="null">Please select</option>
+                <option *ngFor="let role of Roles">{{role}}</option>
+            </select>
+        </div>
+
+    </div>
+
+
+    <!-- <div *ngIf="cardshow">
+        <div class="row mt-3">
+            <div class="col-md-3" *ngFor="let Emp of Employee">
+                <div class="card l-bg-blue-dark w-70" id="demo" style="border-radius: 10px; cursor: pointer;"
+                    (click)="EmpFun(Emp)">
+                    <div class="align-items-center">
+                        <div class="py-2">
+                            <p class="deatilInfoEmp text-center" title="Assign KPI's"><b
+                                    style="color: white;">{{Emp.EmployeeName}}</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</div>
+
+<!-- <div class="card">
+    <div class="card-body" id="demo">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+      <button type="button" class="btn btn-primary">Button</button>
+    </div>
+  </div> -->
+<div class="container">
+    <div class="row">
+        <div *ngFor="let Emp of Employee">
+            <ng-container class="col-md-4" *ngIf=" Emp.Status == 'PENDING'; else submitted">
+                <div class="card"
+                    style="margin-left: 10px; margin-top: 10px;  width: 200px; border-radius: 10px; cursor: pointer; background-color: #FF6347;"
+                    (click)="EmpFun(Emp)">
+                    <div class="align-items-center">
+                        <div class="py-2">
+                            <p class="deatilInfoEmp text-center" title="Assign KPI's"><b
+                                    style="color: white;">{{Emp.EmployeeName}}</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #submitted>
+                <ng-container class="col-md-4" *ngIf=" Emp.Status == 'SUBMITTED'; else Managerapproval">
+                    <div class="card"
+                        style=" margin-top: 10px; margin-left: 10px;  width: 200px; border-radius: 10px; cursor: pointer; background-color: #0F52BA;"
+                        (click)="EmpFun(Emp)">
+                        <div class="align-items-center">
+                            <div class="py-2">
+                                <p class="deatilInfoEmp text-center" title="Assign KPI's"><b
+                                        style="color: white;">{{Emp.EmployeeName}}</b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-template>
+
+            <ng-template #Managerapproval>
+                <ng-container class="col-md-4" *ngIf=" Emp.Status == 'MANAGER APPROVED'; else Hrapproval">
+                    <div class="card"
+                        style="margin-left: 10px; margin-top: 10px;  width: 200px; border-radius: 10px; cursor: pointer; background-color: #19BC28;"
+                        (click)="EmpFun(Emp)">
+                        <div class="align-items-center">
+                            <div class="py-2">
+                                <p class="deatilInfoEmp text-center" title="Assign KPI's"><b
+                                        style="color: white;">{{Emp.EmployeeName}}</b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-template>
+            <ng-template #Hrapproval>
+                <ng-container class="col-md-4" *ngIf=" Emp.Status == 'HR APPROVED'">
+                    <div class="card"
+                        style=" margin-left: 10px; margin-top: 10px; border-radius: 10px; width: 200px; cursor: pointer; background-color: #C47535;"
+                        (click)="EmpFun(Emp)">
+                        <div class="align-items-center">
+                            <div class="py-2">
+                                <p class="deatilInfoEmp text-center" title="Assign KPI's"><b
+                                        style="color: white;">{{Emp.EmployeeName}}</b>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-template>
+        </div>
+    </div>
+</div>

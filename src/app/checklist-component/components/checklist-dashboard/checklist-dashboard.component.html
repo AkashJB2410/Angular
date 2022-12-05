@@ -1,0 +1,543 @@
+<!-----select options------->
+<div class="wrapper">
+  <div class="container">
+    <!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                  class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+      </div> -->
+    <div class="row">
+      <div class="col-2" style="margin-top: 1rem;">
+        <!-- <label class="navbar-brand" href="#" style="color: white; font-size: 14px;"> State :</label> -->
+        <select (change)="LoadAllCentres($event.target.value)" class="selectBox">
+          <option [ngValue]="null" disabled selected>Select States</option>
+          <option *ngFor="let c of stateNames let i=index">{{c.name}}</option>
+        </select>
+      </div>
+
+      <div class="col-2 SecondDrop" style="margin-top: 1rem;">
+        <!-- <label class="navbar-brand" href="#" style="color: white;font-size: 14px;"> Centers:</label> -->
+        <!-- <select (change)="LoadEmpList($event.target.value)" class="SecondDrop" class="selectBox"> -->
+        <select (change)="LoadEmpList($event.target.value)" class="selectBox">
+          <option [ngValue]="null" disabled selected>Select Center</option>
+          <option #center *ngFor="let details of loadCentres" [value]='details.centerCode'>{{details.centerName}}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-2 " style="margin-top: 1rem;">
+        <!-- <label class="navbar-brand" href="#" style="color: white;font-size: 14px;">For the Dates:</label> -->
+        <select #select (change)="Range($event.target.value)" class="selectBox">
+          <option value="Please select" disabled selected>Select Dates</option>
+          <option value="Today">Today-{{ today | date : "dd/MM/yyyy" }}</option>
+          <option value="Yesterday">yesterday-{{ yesterdaydte | date : "dd/MM/yyyy" }}</option>
+          <option value="Date Range">Date Range</option>
+        </select>
+      </div>
+
+
+      <div class="col-2" *ngIf="date" style="margin-top: 25px;" class="selectBox">
+        <label for="Date" style="color: white;font-size: 14px;">Start Date:</label>
+        <input (change)="Startdate($event.target.value)" type="date" name="date">
+      </div>
+      <div class="col-2" *ngIf="date" style="margin-top: 25px;" class="selectBox">
+        <label for="Date" style="color: white;font-size: 14px;">End Date:</label>
+        <input (change)="Enddate($event.target.value)" type="date" name="date">
+      </div>
+
+      <div class="col-2 " style="margin-top: 1rem;">
+        <!-- <label class="navbar-brand" href="#" style="color: white;font-size: 14px;">Employees:</label> -->
+        <select #select1 (change)="Employeename($event.target.value)" class="selectBox">
+          <option value="Please select" disabled selected>Select Employees</option>
+          <option *ngFor="let details of employee" [value]='details.EmployeeId'>{{details.EmployeeName}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="container">
+      <div class="row" style="margin-top: 1rem;">
+          <div class="row" *ngIf="date">
+              <div class="col-5" style="margin-left: 16px;">
+                  <label for="Date" style="color: white;">Start Date:</label>
+                  <input (change)="Startdate($event.target.value)" type="date" name="date">
+              </div>
+              <div class="col-4">
+                  <label for="Date" style="color: white;">End Date:</label>
+                  <input (change)="Enddate($event.target.value)" type="date" name="date">
+              </div>
+          </div>
+      </div>
+  </div> -->
+
+  <div *ngIf="centerSelected">
+    <app-employee-list [selectedState]="selectedState" [loadlist]='empList' [centerid]='centerid'></app-employee-list>
+  </div>
+
+  <!-----4 cards----->
+
+  <div class="container" style="margin-top: 2rem">
+    <div class="row">
+      <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-3 col-md-3 mb-4">
+        <div class="card card border-left-success shadow h-100 " (click)="Status('Submitted')">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                  Completed Checklist </div>
+                <div class="text-value" style="color: #5a5c69 ;">{{CompletedChecklist}}</div>
+              </div>
+              <div class="col-auto" class="text-gray-300">
+                <!-- <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
+                <span class="iconify" data-icon="fa-solid:clipboard-list" style="font-size: 2em; color: #1cc88a"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-3 mb-4">
+        <div class="card border-left-warning shadow h-100 " (click)="Status('Pending')">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                  Pending Checklist </div>
+                <div class="text-value">{{pendingChecklist}}</div>
+              </div>
+              <div class="col-auto" class="text-gray-300">
+                <!-- <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
+                <span class="iconify" data-icon="fa-solid:clipboard-list"
+                  style="font-size: 2em; color: #ffc107;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-3 mb-4">
+        <div class="card border-left-approve shadow h-100 " (click)="Status('Approved')">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-approve text-uppercase mb-1">
+                  Approved Checklist </div>
+                <div class="text-value">{{approvedChecklist}}</div>
+              </div>
+              <div class="col-auto" class="text-gray-300">
+                <!-- <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
+                <span class="iconify" data-icon="fa-solid:clipboard-list"
+                  style="font-size: 2em; color: #f86c6b;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-3 mb-4">
+        <div class="card border-left-primary shadow h-100 " (click)="Status('Rejected')">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                  Rejected Checklist </div>
+                <div class="text-value">{{rejectedChecklist}}</div>
+              </div>
+
+              <div class="col-auto" class="text-gray-300">
+                <!-- <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
+                <span class="iconify" data-icon="fa-solid:clipboard-list"
+                  style="font-size: 2em; color: #4e73df;"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row" *ngIf="chart">
+      <div class="col-lg-4">
+        <div class="card card-chart">
+          <div class="card-header" style="color: #f86c6b;">
+            <h5 class="card-category">Doughnut Chart</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas baseChart class="chart" [colors]="donutColors" [data]="doughnutChartData"
+                [labels]="doughnutChartLabels" [options]="Options" [chartType]="doughnutChartType"
+                (chartHover)="chartHovered($event)" (chartClick)="chartclicked($event)" style="background-color: white;
+    border-radius: 10px;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card card-chart">
+          <div class="card-header" style="color: #3066be;">
+            <h5 class="card-category">Bar Chart</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas baseChart class="chart" *ngIf="chartReady" [colors]="barChartColors" [datasets]="barChartData"
+                [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+                [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartclicked($event)"
+                style="display: block;width: 947px;height: 482px;" width="750" height="450" style="background-color: white;
+        border-radius: 10px;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card card-chart">
+          <div class="card-header" style="color: #14af77;">
+            <h5 class="card-category">Pie Chart</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas baseChart class="chart" *ngIf="chartReady" [data]="pieChartData" [labels]="pieChartLabels"
+                [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartclicked($event)"
+                style="background-color: white;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="chart" style="margin-top: 2rem; padding-bottom: 2rem;">
+      <!-- <div class="col-lg-4">
+        <div class="card card-chart">
+          <div class="card-header" style="color: #f86c6b;">
+            <h5 class="card-category">Doughnut Chart</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas baseChart class="chart" [colors]="donutColors" [data]="doughnutChartData"
+                [labels]="doughnutChartLabels" [options]="Options" [chartType]="doughnutChartType"
+                (chartHover)="chartHovered($event)" (chartClick)="chartclicked($event)" style="background-color: white;
+    border-radius: 10px;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-lg-8">
+        <div class="card card-chart">
+          <div class="card-header" style="color: #3066be;">
+            <h5 class="card-category">Bar Chart</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas baseChart class="chart" *ngIf="chartReady" [colors]="barChartColors" [datasets]="barChartData"
+                [labels]="barChartLabels" [options]="barChartOptions" [legend]="barChartLegend"
+                [chartType]="barChartType" (chartHover)="chartHovered($event)" (chartClick)="chartclicked($event)"
+                style="display: block;width: 947px;height: 482px;" width="750" height="450" style="background-color: white;
+        border-radius: 10px;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="card card-chart">
+          <div class="card-header" style="color: #14af77;">
+            <h5 class="card-category">Pie Chart</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-area">
+              <canvas baseChart class="chart" *ngIf="chartReady" [data]="pieChartData" [labels]="pieChartLabels"
+                [chartType]="pieChartType" (chartHover)="chartHovered($event)" (chartClick)="chartclicked($event)"
+                style="background-color: white;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-category" style="color: #4e73df;">Traffic &amp; Sales</h5> 
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="callout callout-info">
+                      <small class="text-muted">New Clients</small>
+                      <br>
+                      <strong class="h4">9,123</strong>
+                    </div>
+                  </div>
+                  <!--/.col-->
+                  <div class="col-sm-6">
+                    <div class="callout callout-danger">
+                      <small class="text-muted">Recuring Clients</small>
+                      <br>
+                      <strong class="h4">22,643</strong>
+                    </div>
+                  </div>
+                  <!--/.col-->
+                </div>
+                <!--/.row-->
+                <hr class="mt-0">
+                <div class="progress-group mb-4">
+                  <div class="progress-group-prepend">
+                    <span class="progress-group-text">
+                      Monday
+                    </span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 34%" aria-valuenow="34"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 78%" aria-valuenow="78"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group mb-4">
+                  <div class="progress-group-prepend">
+                    <span class="progress-group-text">
+                      Tuesday
+                    </span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 56%" aria-valuenow="56"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 94%" aria-valuenow="94"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group mb-4">
+                  <div class="progress-group-prepend">
+                    <span class="progress-group-text">
+                      Wednesday
+                    </span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 12%" aria-valuenow="12"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 67%" aria-valuenow="67"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group mb-4">
+                  <div class="progress-group-prepend">
+                    <span class="progress-group-text">
+                      Thursday
+                    </span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 43%" aria-valuenow="43"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 91%" aria-valuenow="91"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group mb-4">
+                  <div class="progress-group-prepend">
+                    <span class="progress-group-text">
+                      Friday
+                    </span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 22%" aria-valuenow="22"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 73%" aria-valuenow="73"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group mb-4">
+                  <div class="progress-group-prepend">
+                    <span class="progress-group-text">
+                      Saturday
+                    </span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 53%" aria-valuenow="53"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 82%" aria-valuenow="82"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group mb-4">
+                  <div class="progress-group-prepend">
+                    <span class="progress-group-text">
+                      Sunday
+                    </span>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 9%" aria-valuenow="9"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 69%" aria-valuenow="69"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--/.col-->
+              <div class="col-sm-6">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="callout callout-warning">
+                      <small class="text-muted">Pageviews</small>
+                      <br>
+                      <strong class="h4">78,623</strong>
+                    </div>
+                  </div>
+                  <!--/.col-->
+                  <div class="col-sm-6">
+                    <div class="callout callout-success">
+                      <small class="text-muted">Organic</small>
+                      <br>
+                      <strong class="h4">49,123</strong>
+                    </div>
+                  </div>
+                  <!--/.col-->
+                </div>
+                <!--/.row-->
+                <hr class="mt-0">
+                <div class="progress-group">
+                  <div class="progress-group-header">
+                    <i class="icon-user progress-group-icon"></i>
+                    <div>Male</div>
+                    <div class="ml-auto font-weight-bold">43%</div>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 43%" aria-valuenow="43"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group mb-5">
+                  <div class="progress-group-header">
+                    <i class="icon-user-female progress-group-icon"></i>
+                    <div>Female</div>
+                    <div class="ml-auto font-weight-bold">37%</div>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 43%" aria-valuenow="43"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <div class="progress-group-header align-items-end">
+                    <i class="icon-globe progress-group-icon"></i>
+                    <div>Organic Search</div>
+                    <div class="ml-auto font-weight-bold mr-2">191.235</div>
+                    <div class="text-muted small">(56%)</div>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 56%" aria-valuenow="56"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <div class="progress-group-header align-items-end">
+                    <i class="icon-social-facebook progress-group-icon"></i>
+                    <div>Facebook</div>
+                    <div class="ml-auto font-weight-bold mr-2">51.223</div>
+                    <div class="text-muted small">(15%)</div>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 15%" aria-valuenow="15"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <div class="progress-group-header align-items-end">
+                    <i class="icon-social-twitter progress-group-icon"></i>
+                    <div>Twitter</div>
+                    <div class="ml-auto font-weight-bold mr-2">37.564</div>
+                    <div class="text-muted small">(11%)</div>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 11%" aria-valuenow="11"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="progress-group">
+                  <div class="progress-group-header align-items-end">
+                    <i class="icon-social-linkedin progress-group-icon"></i>
+                    <div>LinkedIn</div>
+                    <div class="ml-auto font-weight-bold mr-2">27.319</div>
+                    <div class="text-muted small">(8%)</div>
+                  </div>
+                  <div class="progress-group-bars">
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 8%" aria-valuenow="8"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--/.col-->
+            </div>
+            <!--/.row-->
+          </div>
+        </div>
+      </div>
+      <!--/.col-->
+    </div>
+  </div>
+  <!------3 charts------>
+
+  <!----pop up approval---->
+  <div bsModal #largeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Checklist</h4>
+          <button type="button" class="close" (click)="largeModalclose()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-grid *ngIf="dashboard" (onGridSelected)="onSelect($event)" [isSearchBar]="true"
+            [dataFromComponent]="subCheckLits" [statusfromcomponent]="status" [coloums]="columns" title="Search">
+          </app-grid>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" (click)="largeModalclose()">Close</button>
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+</div>

@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="container">
+    <app-time-submit [IsApproval]=true [EmployeId]="EmpId" [selectedDateRange]="SubmittedData.TimeSheetRange"></app-time-submit>
+  </div>
+</div>
+<div class="">
+  <div class="row" style="text-align: center;margin-top: 20px;">
+    <div class="col-md-3">
+      <label for="comment" disabled="false"><b>Comments:</b></label>
+    </div>
+    <div class="col-md-3">
+      <textarea rows="4" cols="35" #addComm="ngModel" required ngModel style="resize: none;" [disabled]="isDissabled" > </textarea><br>
+      <span class="error" *ngIf="addComm.invalid && addComm.touched">This field is required</span>
+    </div>
+    <div *ngIf="ErrorMessage" class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Comments are compulsary to reject checklist !</strong>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <div class="float-right mt-3">
+    <button class="btn btn-danger" (click)="Reject(addComm)" type="submit" [disabled]="isDissabled">Return
+    </button>
+    <button class="btn btn-primary" (click)="Approve(addComm)" type="submit" [disabled]="isDissabled" >Approve</button>
+  </div>
+</div>

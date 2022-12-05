@@ -1,0 +1,137 @@
+<div class="container">
+    <form #heroForm="ngForm" style="color: #3177b3; font-size: 11px; margin-top: 20px;">
+        <div class="form-group row">
+            <!-- <div class="col-md-7">
+                <label class="col-form-label mr-2" for="name">Select Date Range :</label>
+                <mat-form-field appearance="fill">
+                    <mat-label>Enter a date range</mat-label>
+                    <mat-date-range-input [rangePicker]="picker">
+                        <input #start matStartDate placeholder="Start date">
+                        <input #end matEndDate placeholder="End date">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-date-range-picker #picker></mat-date-range-picker>
+                </mat-form-field>
+                <button class="btn btn-primary ml-2 mb-3"
+                    (click)="SelectedDateRange(start.value,end.value)">Get TimeSheet</button>
+            </div> -->
+            <!-- <label class="col-md-2 col-form-label text-center" for="desc">Staus Filter :</label> -->
+            <div class="col-md-5">
+                <label class="col-form-label mr-2" for="desc">Staus Filter :</label>
+                <select (change)="StatusFilter($event.target.value)">
+                    <option value="Submitted">Submitted</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <!-- <div class="row mt-4">
+        <div class="col-md-2 py-3">
+            <strong><span>Select Date Range :</span></strong>
+        </div>
+        <div class="col-md-4">
+            <mat-form-field appearance="fill">
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                    <input #start matStartDate placeholder="Start date">
+                    <input #end matEndDate placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
+        <div class="col-md-2 mt-2">
+            <select (change)="StatusFilter($event.target.value)"
+                style="border-radius:5px;border-color: rgb(0, 0, 0);  height: 28px;width:80%;">
+                <option value="Submitted">Submitted</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+             <div class="btn btn-primary" (change)="SelectedDateRange(start.value,end.value)"></div> 
+        </div>
+        <div class="col-md-2 mt-2">
+            <div class="btn btn-primary" (click)="SelectedDateRange(start.value,end.value)">Get TimeSheets</div>
+        </div>
+    </div> -->
+    <div *ngIf="span" style="text-align: center;">
+        <span style="color:red;font-size: 17px;">No TimeSheets to display...!</span>
+    </div>
+    <div class="mt-2" *ngIf="ShowGrid">
+        <app-grid *ngIf="AllData" [Heading]="Heading" [dataFromComponent]="AllData" (onGridSelected)='onSelect($event)' [coloums]="coloums">
+        </app-grid>
+    </div>
+</div>
+
+<div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'static' }" *ngIf="LargeModal" class="modal fade"
+    tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header header">
+                <h4 class="modal-title">Task List</h4>
+                <button type="button" class="close" (click)="LargeModalhide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <p>Employee Name - <strong>{{EmpName}}</strong></p>
+                    </div>
+                    <div class="col">
+                        <p>Employee Id - <strong>{{SelectedEmpId}}</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p>Status - <strong>{{SubmittedData.Status}}</strong></p>
+                    </div>
+                    <div class="col">
+                        <p>Range - <strong>{{SubmittedData.TimeSheetRange}}</strong></p>
+                    </div>
+                </div>
+                <app-show-tasklist [SubmittedData]="SubmittedData" [EmpId]="SelectedEmpId" (Result)="Result($event)">
+                </app-show-tasklist>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div bsModal #largeModal="bs-modal" [config]="{ backdrop: 'static' }" *ngIf="LargeModal" class="modal fade"
+    tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header header">
+                <h4 class="modal-title">Task List</h4>
+                <button type="button" class="close" (click)="LargeModalhide()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <p>Employee Name - {{EmpName}}</p>
+                            </div>
+                            <div class="col">
+                                <p>Employee Id - {{EmpId}}</p>
+                            </div>
+                        </div>
+                        <app-grid *ngIf="SubmittedData" [isCheckbox]="true" [dataFromComponent]="SubmittedData"
+                            [coloums]="coloums"></app-grid>
+                    </div>
+                </div>
+               <app-show-tasklist (CloseLarge)="CloseLargeModal($event)" [EmpId]="EmpId"
+                    [QueAnsData]="chkId" (Result)="result($event)"></app-show-tasklist> 
+            </div>
+            <div class="modal-footer">
+                <div class="float-right mt-3">
+                    <button class="btn btn-danger" (click)="largeModalClose()" type="submit">Reject
+                    </button>
+                    <button class="btn btn-primary" (click)="ApproveTask" type="submit">Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

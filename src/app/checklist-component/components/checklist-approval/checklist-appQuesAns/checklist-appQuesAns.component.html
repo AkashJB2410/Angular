@@ -1,0 +1,147 @@
+<!----------- Popup Form to get QueAnsData------------>
+
+<div class="form-group row">
+  <strong class="col-md-3 col-form-label" style="color: #3177b3;">CheckList Name -</strong>
+  <label class="col-md-3 col-form-label">{{QueAnsData.CheckListName}}</label>
+  <strong class="col-md-3 col-form-label" style="color: #3177b3;">Submitted BY -</strong>
+  <label class="col-md-3 col-form-label">{{QueAnsData.SubmitedBy}}</label>
+</div>
+<div class="form-group row wrapper-7">
+  <strong class="col-md-3 col-form-label" style="color: #3177b3;">Submitted Date -</strong>
+  <label class="col-md-3 col-form-label">{{QueAnsData.CreatedDate}}</label>
+  <strong class="col-md-3 col-form-label" style="color: #3177b3;">Employee Name -</strong>
+  <label class="col-md-3 col-form-label"> {{QueAnsData.SubmitedFor}}</label>
+</div>
+
+<div *ngIf="AMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Success!</strong>
+</div>
+<div *ngIf="RMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>Reject!</strong>
+</div>
+
+<div class="form-group ">
+  <table id="table" class="container-fluid">
+    <app-grid *ngIf="subQuestionsAns" [Img]="true" [isDropDown]="false" [isSearchBar]="true" [isCheckbox]="true"
+      [dataFromComponent]="subQuestionsAns" [coloums]="coloumsQ"></app-grid>
+  </table>
+</div>
+
+<div class="wrapper-1">
+  <div class="row" style="text-align: center;">
+    <div class="col-md-3">
+      <label for="comment" disabled="false"><b>Comments:</b></label>
+    </div>
+    <div class="col-md-3">
+      <textarea rows="4" cols="35" #addComm="ngModel" required ngModel> </textarea>
+      <span class="error" *ngIf="addComm.invalid && addComm.touched">This field is required</span>
+    </div>
+    <div *ngIf="ErrorMessage" class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Comments are compulsary to reject checklist !</strong>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="CheckValueapprove(addComm)">Approve</button>
+    <button type="button" class="btn btn-danger " (click)="CheckValueonRejectClick(addComm)">Reject</button>
+    <button type="submit" class="btn btn-primary" *ngIf="ExcelExport" title="Download
+    Excel" (click)="exportexcel()" style="font-weight: 500;outline: none"><img src="../../../assets/img/download.png"
+        height="15" width="15" style="margin-right: 10px;" />Download
+      Excel</button>
+  </div>
+</div>
+
+<div bsModal #myModal="bs-modal" [config]="{ backdrop: 'true'}" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xxl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Image Preview</h4>
+        <button type="button" class="close" (click)="myModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-5" *ngFor="let image of Arr">
+            <div class="dropdown">
+              <img [src]="image" height="500px" width="300px">
+              <div class="dropdown-content">
+                <img [src]="image" width="300px" height="200px">
+                <!-- <div class="desc">Beautiful Cinque Terre</div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="myModal.hide()">Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #SuccessModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6>Approve successfull..!</h6><br>
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-3">
+            <!-- <button type="button" class="btn btn-outline-secondary"
+                            (click)="SuccessModal.hide()">Cancel</button> -->
+          </div>
+          <div class="col-3">
+            <button type="button" class="btn btn-success">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div bsModal #RejectModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6>Rejected!</h6><br>
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-3">
+            <!-- <button type="button" class="btn btn-outline-secondary"
+                            (click)="RejectModal.hide()">Cancel</button> -->
+          </div>
+          <div class="col-3">
+            <button type="button" class="btn btn-danger" (click)="RejectModal.hide()">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #Modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6>This checklist already approve !</h6><br>
+        <div class="row">
+          <div class="col-6"></div>
+          <div class="col-3">
+            <!-- <button type="button" class="btn btn-outline-secondary"
+                            (click)="RejectModal.hide()">Cancel</button> -->
+          </div>
+          <div class="col-3">
+            <button type="button" class="btn btn-info" (click)="Modal.hide()">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

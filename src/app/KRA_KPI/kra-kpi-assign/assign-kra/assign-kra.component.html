@@ -1,0 +1,51 @@
+<!-- assign Screen -->
+<div bsModal #infoAssign="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-info modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Assign Task </h4>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <ng-multiselect-dropdown [placeholder]="'Select Task'" [data]="TaskList" [(ngModel)]="selectedItems"
+                        [settings]="dropdownSettings">
+                    </ng-multiselect-dropdown>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="">
+                    <button type="button" class="btn btn-danger" (click)="infoAssign.hide()" aria-label="Close">
+                        <span aria-hidden="true">Close</span>
+                    </button>
+                    <button type="button" class="btn btn-success" (click)="AssignTask()" aria-label="Close"
+                        data-target=".bd-example-modal-sm">
+                        <span aria-hidden="true">Add</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div bsModal #deleteAss="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h6>You want to delete this Assigned Task ?</h6><br>
+                <div class="row">
+                    <div class="col-6"></div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-outline-secondary"
+                            (click)="deleteAss.hide()">Cancel</button>
+                          
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-danger" (click)="RemoveAssignedTask()">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
